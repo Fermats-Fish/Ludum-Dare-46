@@ -112,8 +112,11 @@ public class UIController : MonoBehaviour
             // Click to place plant.
             if (Input.GetMouseButtonDown(0))
             {
-                Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                GameController.instance.CreatePlant(new Vector2(pos.x, pos.y), selectedPlantType);
+                if (GameController.instance.TrySubtractCarbon(selectedPlantType.carbonBuildCost))
+                {
+                    Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    GameController.instance.CreatePlant(new Vector2(pos.x, pos.y), selectedPlantType);
+                }
 
                 // If not holding control, deselct the plant type...
                 if (!Input.GetKey(KeyCode.LeftControl))
@@ -130,8 +133,14 @@ public class UIController : MonoBehaviour
         }
     }
 
-    public void UpdateCarbonText()
+    public void OnCarbonChanged()
     {
-        carbonText.text = "Carbon: " + (GameController.instance.carbon / 10000f).ToString("0.00");
+        carbonText.text = "Carbon: " + (GameController.instance.GetCarbon() / 10000f).ToString("0.00");
+        foreach (var plantType in PlantType.plantTypes)
+        {
+            PlantButton button;
+            plantButtons.TryGetValue(plantType, out button);
+            button.button.interactable = GameController.instance.GetCarbon() >= plantType.carbonBuildCost;
+        }
     }
 }

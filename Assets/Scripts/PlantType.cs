@@ -7,8 +7,8 @@ public class PlantType
 
     public static List<PlantType> plantTypes = new List<PlantType>
     {
-        new PlantType("Oak", Color.white, 20, 20, 100, 200, 1f),
-        new PlantType("Pine", new Color(0.5f, 0.5f, 0.5f), 40, 40, 130, 100, 1.5f)
+        new PlantType("Oak", Color.white, 20, 20, 150, 200, .8f, 10, 100),
+        new PlantType("Pine", new Color(0.5f, 0.5f, 0.5f), 40, 40, 100, 100, 1f, 5, 30)
     };
 
     public string name;
@@ -25,7 +25,11 @@ public class PlantType
 
     public Color color;
 
-    public PlantType(string name, Color color, int waterRequirement, int moistureAbsorbtionRate, int maxCarbonProduction, int matureTime, float terrainSpeedModifier)
+    public int carbonBuildCost;
+
+    public int health;
+
+    public PlantType(string name, Color color, int waterRequirement, int moistureAbsorbtionRate, int maxCarbonProduction, int matureTime, float terrainSpeedModifier, int carbonBuildCost, int health)
     {
         this.name = name;
         this.waterRequirement = waterRequirement;
@@ -34,6 +38,8 @@ public class PlantType
         this.matureTime = matureTime;
         this.terrainSpeedModifier = terrainSpeedModifier;
         this.color = color;
+        this.carbonBuildCost = carbonBuildCost * 10000;
+        this.health = health;
     }
 
     public void InitSRVisuals(SpriteRenderer sr, int age)

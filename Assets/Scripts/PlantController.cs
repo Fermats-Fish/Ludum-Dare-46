@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlantController : MonoBehaviour
 {
-    public float maxHealth = 100;
+    public float maxHealth;
     public float health;
     public float flammability;
     public bool onFire = false, beingChoppedDown = false;
@@ -30,6 +30,7 @@ public class PlantController : MonoBehaviour
         plantType.InitSRVisuals(spriteRenderer, age);
 
         // Init some things.
+        maxHealth = plantType.health;
         health = maxHealth;
         position = transform.position;
         transform.position = new Vector3(position.x, position.y, position.y / 10);
@@ -99,7 +100,7 @@ public class PlantController : MonoBehaviour
         SetAge(age + 1);
 
         long carbonProduced = Mathf.FloorToInt(plantType.maxCarbonProduction * Mathf.Pow(1 - 100f / (100f + plantType.matureTime * age), 10));
-        GameController.instance.carbon += carbonProduced;
+        GameController.instance.AddToCarbon(carbonProduced);
     }
 
     public void SetAge(int newAge)

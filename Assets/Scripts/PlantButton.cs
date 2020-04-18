@@ -11,12 +11,15 @@ public class PlantButton : MonoBehaviour
     static readonly Color DESELECTED_COLOR = new Color(1f, 1f, 1f, 43f / 255f);
     static readonly Color SELECTED_COLOR = new Color(1f, 1f, 1f, 100f / 255f);
 
+    public Button button;
+
     public void Initialise(PlantType plantType)
     {
         UIController.instance.plantButtons.Add(plantType, this);
         this.plantType = plantType;
         GetComponentInChildren<Text>().text = "Plant " + plantType.name;
         image = GetComponent<Image>();
+        this.button = GetComponent<Button>();
     }
 
     public void Press()

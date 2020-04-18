@@ -14,7 +14,7 @@ public class GameController : MonoBehaviour
 
     float treeTimer = 0f;
 
-    public long carbon = 0;
+    long carbon = 0;
 
     void Start()
     {
@@ -39,7 +39,7 @@ public class GameController : MonoBehaviour
         }
 
 
-        UIController.instance.UpdateCarbonText();
+        UIController.instance.OnCarbonChanged();
 
     }
 
@@ -66,8 +66,42 @@ public class GameController : MonoBehaviour
                 tree.Grow();
             }
             treeTimer -= TREE_UPDATE_PERIOD;
-
-            UIController.instance.UpdateCarbonText();
         }
+    }
+
+    public long GetCarbon()
+    {
+        return carbon;
+    }
+
+    public bool TrySubtractCarbon(long delta)
+    {
+        if (GetCarbon() < delta)
+        {
+            return false;
+        }
+        else
+        {
+            SetCarbon(carbon - delta);
+            return true;
+        }
+    }
+
+    public void AddToCarbon(long delta)
+    {
+        if (delta < 0)
+        {
+            Debug.LogError("Trying to add a negative amount of carbon. Use TrySubtractCarbon instead.");
+        }
+
+        SetCarbon(carbon + delta);
+    }
+
+    void SetCarbon(long newCarbon)
+    {
+        carbon = newCarbon;
+
+        // Tell the UIController to update which buttons are enabled.
+        UIController.instance.OnCarbonChanged();
     }
 }

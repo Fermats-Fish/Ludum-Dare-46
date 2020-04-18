@@ -48,9 +48,6 @@ public class Enemy : MonoBehaviour
 
                 LookForTree();
 
-                //print("looking for tree");
-
-
             }
         }
         else
@@ -71,12 +68,19 @@ public class Enemy : MonoBehaviour
     protected virtual void LookForTree()
     {
         List<PlantController> trees = GameController.instance.trees;
+
+        if (trees.Count == 0)
+        {
+            attackMode = false;
+            return;
+        }
+
         int targetIndex = 0;
         float closestDist = TreeClosest(trees[targetIndex]);
 
         for (int i = 0; i < trees.Count; i++)
         {
-            if (!trees[i].beingChoppedDown&&!trees[i].onFire)
+            if (!trees[i].beingChoppedDown && !trees[i].onFire)
             {
                 float d = TreeClosest(trees[i]);
                 if (d < closestDist)
@@ -89,7 +93,6 @@ public class Enemy : MonoBehaviour
         }
         target = trees[targetIndex];
         target.beingChoppedDown = true;
-        //print("found tree at " + target.transform.position);
 
     }
     protected virtual void AttackTree()
