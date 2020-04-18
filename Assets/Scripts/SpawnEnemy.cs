@@ -7,30 +7,31 @@ public class SpawnEnemy : MonoBehaviour
     public int numberOfEnemies;
     public GameObject enemyPrefab;
     List<Enemy> enemies = new List<Enemy>();
- 
+
 
     // Start is called before the first frame update
     void Start()
     {
-        for (int i = 0; i < numberOfEnemies; i++) {
+        for (int i = 0; i < numberOfEnemies; i++)
+        {
             Enemy newEnemy = Instantiate(enemyPrefab).GetComponent<Enemy>();
             newEnemy.home = transform;
             newEnemy.transform.position = transform.position;
             enemies.Add(newEnemy);
         }
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
     public void SendOutAnEnemy()
     {
         for (int i = 0; i < enemies.Count; i++)
         {
-            if (enemies[i].attackMode = false)
+            if (enemies[i].attackMode == false)
             {
                 enemies[i].attackMode = true;
                 return;
@@ -38,12 +39,15 @@ public class SpawnEnemy : MonoBehaviour
         }
     }
 
-    public void SendOutAllEnemies() {
-        for (int i = 0; i < enemies.Count;i++) {
-            enemies[i].attackMode = true; 
+    public void SendOutAllEnemies()
+    {
+        for (int i = 0; i < enemies.Count; i++)
+        {
+            enemies[i].attackMode = true;
         }
     }
-    public void RecallEnemies() {
+    public void RecallEnemies()
+    {
         for (int i = 0; i < enemies.Count; i++)
         {
             enemies[i].attackMode = false;

@@ -4,30 +4,40 @@ using UnityEngine;
 
 public class TreeController : MonoBehaviour
 {
-    public const int TREE_Z = 0;
-    public float maxHealth = 100;
+    float maxHealth = 100;
     public float health;
     public float flammability;
     public bool onFire = false;
     public SpriteRenderer spriteRenderer;
     Vector3 position;
 
-    int MAX_CARBON_PRODUCED = 100;
-
     int age = 1;
     const float SCALE = 1f;
-    public Sprite[] sprites;
+
+    public PlantType plantType;
+
+    public void Initialise(PlantType plantType)
+    {
+        // Add to the list of trees.
+        GameController.instance.trees.Add(this);
+
+        // Set the plant type.
+        this.plantType = plantType;
+
+        // Set the sprite.
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        plantType.InitSRVisuals(spriteRenderer);
+
+        // Init some things.
+        health = maxHealth;
+        position = transform.position;
+        transform.position = new Vector3(position.x, position.y, position.y / 10);
+        Grow();
+
+    }
 
     void Start()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-
-        spriteRenderer.sprite = sprites[(int)(Random.value * sprites.Length)];
-       
-        health = maxHealth;
-        position = transform.position;
-        transform.position = new Vector3(position.x, position.y, position.y/10);
-        Grow();
     }
 
     void Update()
@@ -38,15 +48,21 @@ public class TreeController : MonoBehaviour
         }
     }
 
-    public void Attacked(float attack) {
+    public void Attacked(float attack)
+    {
         health -= attack;
         StartCoroutine("Shake");
-        
+        if (health < 0)
+        {
+            OnDeath();
+        }
     }
 
-    IEnumerator Shake() {
-        for (float t = 1; t >= 0; t -= 0.1f) {
-            transform.position = position + Mathf.Cos(10*t)/10*Vector3.right;
+    IEnumerator Shake()
+    {
+        for (float t = 1; t >= 0; t -= 0.1f)
+        {
+            transform.position = position + Mathf.Cos(10 * t) / 10 * Vector3.right;
             yield return null;
         }
     }
@@ -78,11 +94,11 @@ public class TreeController : MonoBehaviour
     public void Grow()
     {
         age += 1;
-        long treeSize = Mathf.FloorToInt(MAX_CARBON_PRODUCED * Mathf.Pow(1 - 1f / age, 0.1f));
-       
-        transform.localScale = Vector3.one * treeSize / MAX_CARBON_PRODUCED;
+        long treeSize = Mathf.FloorToInt(plantType.maxCarbonProduction * Mathf.Pow(1 - 1f / age, 0.1f));
+
+        transform.localScale = Vector3.one * treeSize / plantType.maxCarbonProduction;
         GameController.instance.carbon += treeSize;
     }
 
-    
+
 }
