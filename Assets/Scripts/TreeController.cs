@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TreeController : MonoBehaviour
 {
-    float maxHealth = 100;
+    public float maxHealth = 100;
     public float health;
     public float flammability;
     public bool onFire = false;
@@ -73,7 +73,7 @@ public class TreeController : MonoBehaviour
         Color c = spriteRenderer.color;
         for (float t = fadeTime; t >= 0; t -= 0.1f)
         {
-            spriteRenderer.color = c * t/fadeTime;
+            spriteRenderer.color = c * t / fadeTime;
             yield return null;
         }
     }
@@ -81,13 +81,14 @@ public class TreeController : MonoBehaviour
     public void OnDeath()
     {
         GameController.instance.trees.Remove(this);
-        if (onFire) {
+        if (onFire)
+        {
             StartCoroutine("Fade");
             Destroy(gameObject, 5f);
             return;
         }
-        
-        
+
+
         Destroy(gameObject, .5f);
     }
 
