@@ -26,6 +26,15 @@ public class GameController : MonoBehaviour
             instance = this;
         }
 
+        // Place some inital trees.
+        for (int i = 0; i < 100; i++)
+        {
+            Vector3 x = Random.onUnitSphere;
+            Vector2 coord = new Vector2(x.x, x.y);
+            coord = coord.normalized * Random.Range(0f, 10f);
+            CreateTree(coord);
+        }
+
     }
 
     void CreateTree(Vector2 position)
@@ -48,6 +57,7 @@ public class GameController : MonoBehaviour
             {
                 tree.Grow();
             }
+            treeTimer -= TREE_UPDATE_PERIOD;
         }
     }
 }
