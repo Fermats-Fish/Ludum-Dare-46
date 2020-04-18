@@ -56,7 +56,7 @@ public class UIController : MonoBehaviour
 
         // Instantiate a ghost plant.
         plantGhost = Instantiate(plantGhostPrefab);
-        plantType.InitSRVisuals(plantGhost.GetComponent<SpriteRenderer>());
+        plantType.InitSRVisuals(plantGhost.GetComponent<SpriteRenderer>(), 1);
 
         UpdateGhostPosition();
 
@@ -113,7 +113,7 @@ public class UIController : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                GameController.instance.CreateTree(new Vector2(pos.x, pos.y), selectedPlantType);
+                GameController.instance.CreatePlant(new Vector2(pos.x, pos.y), selectedPlantType);
 
                 // If not holding control, deselct the plant type...
                 if (!Input.GetKey(KeyCode.LeftControl))

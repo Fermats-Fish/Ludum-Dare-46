@@ -34,7 +34,8 @@ public class GameController : MonoBehaviour
             Vector3 x = Random.onUnitSphere;
             Vector2 coord = new Vector2(x.x, x.y);
             coord = coord.normalized * Mathf.Sqrt(Random.Range(0f, 1f)) * 10f;
-            CreateTree(coord, PlantType.plantTypes[Random.Range(0, PlantType.plantTypes.Count)]);
+            PlantController newPlant = CreatePlant(coord, PlantType.plantTypes[Random.Range(0, PlantType.plantTypes.Count)]);
+            newPlant.SetAge(Random.Range(1, newPlant.plantType.matureTime));
         }
 
 
@@ -42,14 +43,16 @@ public class GameController : MonoBehaviour
 
     }
 
-    public void CreateTree(Vector2 position, PlantType selectedPlantType)
+    public PlantController CreatePlant(Vector2 position, PlantType selectedPlantType)
     {
         // Instantiate the new tree.
-        var newTreeGO = Instantiate(treePrefab, new Vector3(position.x, position.y, 0), Quaternion.identity);
-        var newTreeController = newTreeGO.GetComponent<PlantController>();
+        var newPlantGO = Instantiate(treePrefab, new Vector3(position.x, position.y, 0), Quaternion.identity);
+        var newPlantController = newPlantGO.GetComponent<PlantController>();
 
         // Init the tree.
-        newTreeController.Initialise(selectedPlantType);
+        newPlantController.Initialise(selectedPlantType);
+
+        return newPlantController;
     }
 
     void Update()
