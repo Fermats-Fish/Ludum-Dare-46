@@ -8,7 +8,7 @@ public class GameController : MonoBehaviour
 
     public GameObject treePrefab;
 
-    List<TreeController> trees = new List<TreeController>();
+    public List<TreeController> trees = new List<TreeController>();
 
     const float TREE_UPDATE_PERIOD = 5f;
 
