@@ -18,6 +18,7 @@ public class SpawnEnemy : MonoBehaviour
             newEnemy.home = transform;
             newEnemy.transform.position = transform.position;
             enemies.Add(newEnemy);
+            newEnemy.Init();
         }
 
     }

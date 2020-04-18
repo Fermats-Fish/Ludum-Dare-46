@@ -7,7 +7,8 @@ public class PlantController : MonoBehaviour
     public float maxHealth = 100;
     public float health;
     public float flammability;
-    public bool onFire = false;
+    public bool onFire = false, beingChoppedDown = false;
+
     public SpriteRenderer spriteRenderer;
     Vector3 position;
 
@@ -85,7 +86,7 @@ public class PlantController : MonoBehaviour
         if (onFire)
         {
             StartCoroutine("Fade");
-            Destroy(gameObject, 5f);
+            Destroy(gameObject, 10f);
             return;
         }
 
