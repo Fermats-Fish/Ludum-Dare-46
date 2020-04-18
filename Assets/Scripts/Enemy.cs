@@ -11,13 +11,15 @@ public class Enemy : MonoBehaviour
     public float speed, attack, attackPeriod;
     public TreeController target;
 
-    float timeSinceAttack = 0, wood = 0;
+    float timeSinceAttack;
 
+    public float health;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        timeSinceAttack = attackPeriod;
+        health = 100;
     }
 
     // Update is called once per frame
