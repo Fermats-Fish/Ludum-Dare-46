@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class TreeController : MonoBehaviour
 {
-    public const int TREE_Z = 0;
     float maxHealth = 100;
     public float health;
 
@@ -31,6 +30,7 @@ public class TreeController : MonoBehaviour
         // Init some things.
         health = maxHealth;
         position = transform.position;
+        transform.position = new Vector3(position.x, position.y, position.y / 10);
         Grow();
 
     }

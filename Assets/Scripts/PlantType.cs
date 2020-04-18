@@ -35,7 +35,8 @@ public class PlantType
 
     public void InitSRVisuals(SpriteRenderer sr)
     {
-        sr.sprite = Resources.Load<Sprite>("Sprites/" + name);
+        Sprite[] sprites = Resources.LoadAll<Sprite>("Sprites/" + name);
+        sr.sprite = sprites[Random.Range(0, sprites.Length)];
     }
 
 }

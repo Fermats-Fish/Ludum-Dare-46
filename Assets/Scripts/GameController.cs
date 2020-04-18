@@ -45,7 +45,7 @@ public class GameController : MonoBehaviour
     public void CreateTree(Vector2 position, PlantType selectedPlantType)
     {
         // Instantiate the new tree.
-        var newTreeGO = Instantiate(treePrefab, new Vector3(position.x, position.y, TreeController.TREE_Z), Quaternion.identity);
+        var newTreeGO = Instantiate(treePrefab, new Vector3(position.x, position.y, 0), Quaternion.identity);
         var newTreeController = newTreeGO.GetComponent<TreeController>();
 
         // Init the tree.
