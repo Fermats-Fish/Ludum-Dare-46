@@ -15,13 +15,17 @@ public class TreeController : MonoBehaviour
 
     int age = 1;
     const float SCALE = 1f;
-    
+    public Sprite[] sprites;
 
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+
+        spriteRenderer.sprite = sprites[(int)(Random.value * sprites.Length)];
+       
         health = maxHealth;
         position = transform.position;
+        transform.position = new Vector3(position.x, position.y, position.y/10);
         Grow();
     }
 
