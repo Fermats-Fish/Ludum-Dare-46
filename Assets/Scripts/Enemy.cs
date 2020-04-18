@@ -16,11 +16,12 @@ public class Enemy : MonoBehaviour
     public float health;
 
     // Start is called before the first frame update
-    void Start()
+    public void Init()
     {
         timeSinceAttack = attackPeriod;
         health = 100;
         position = transform.position;
+        attackMode = true;
     }
 
     // Update is called once per frame
@@ -67,7 +68,7 @@ public class Enemy : MonoBehaviour
 
 
 
-    void LookForTree()
+    protected virtual void LookForTree()
     {
         List<PlantController> trees = GameController.instance.trees;
         int targetIndex = 0;
@@ -75,19 +76,23 @@ public class Enemy : MonoBehaviour
 
         for (int i = 0; i < trees.Count; i++)
         {
-            float d = TreeClosest(trees[i]);
-            if (d < closestDist)
+            if (!trees[i].beingChoppedDown)
             {
+                float d = TreeClosest(trees[i]);
+                if (d < closestDist)
+                {
 
-                closestDist = d;
-                targetIndex = i;
+                    closestDist = d;
+                    targetIndex = i;
+                }
             }
         }
         target = trees[targetIndex];
+        target.beingChoppedDown = true;
         //print("found tree at " + target.transform.position);
 
     }
-    void AttackTree()
+    protected virtual void AttackTree()
     {
 
         target.Attacked(attack);
