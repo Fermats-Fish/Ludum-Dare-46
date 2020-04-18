@@ -8,7 +8,10 @@ public class TreeController : MonoBehaviour
 
     SpriteRenderer spriteRenderer;
 
-    float size = 1f;
+    int MAX_CARBON_PRODUCED = 100;
+
+    int age = 1;
+    const float SCALE = 1f;
 
     void Start()
     {
@@ -22,7 +25,7 @@ public class TreeController : MonoBehaviour
 
     public void Grow()
     {
-        size = (size + 1) / size;
-        spriteRenderer.size = new Vector2(size, size);
+        age += 1;
+        GameController.instance.carbon += Mathf.FloorToInt(MAX_CARBON_PRODUCED * Mathf.Pow(1 - 1f / age, 0.1f));
     }
 }

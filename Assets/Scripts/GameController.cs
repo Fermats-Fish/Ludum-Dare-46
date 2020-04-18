@@ -14,6 +14,8 @@ public class GameController : MonoBehaviour
 
     float treeTimer = 0f;
 
+    public long carbon = 0;
+
     void Start()
     {
         // Establish instance.
@@ -34,6 +36,8 @@ public class GameController : MonoBehaviour
             coord = coord.normalized * Random.Range(0f, 10f);
             CreateTree(coord);
         }
+
+        UIController.instance.UpdateCarbonText();
 
     }
 
@@ -58,6 +62,8 @@ public class GameController : MonoBehaviour
                 tree.Grow();
             }
             treeTimer -= TREE_UPDATE_PERIOD;
+
+            UIController.instance.UpdateCarbonText();
         }
     }
 }
