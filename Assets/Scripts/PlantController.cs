@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TreeController : MonoBehaviour
+public class PlantController : MonoBehaviour
 {
     public float maxHealth = 100;
     public float health;

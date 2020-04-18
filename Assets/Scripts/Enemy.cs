@@ -9,7 +9,7 @@ public class Enemy : MonoBehaviour
     public bool attackMode;
     public Vector3 direction;
     public float speed, attack, attackPeriod;
-    public TreeController target;
+    public PlantController target;
 
     float timeSinceAttack;
     Vector3 position;
@@ -59,7 +59,7 @@ public class Enemy : MonoBehaviour
         timeSinceAttack += Time.deltaTime;
     }
 
-    float TreeClosest(TreeController tree)
+    float TreeClosest(PlantController tree)
     {
         float closestLocal = Vector3.SqrMagnitude(tree.transform.position - transform.position) + Vector3.SqrMagnitude(tree.transform.position - home.position);
         return closestLocal;
@@ -69,7 +69,7 @@ public class Enemy : MonoBehaviour
 
     void LookForTree()
     {
-        List<TreeController> trees = GameController.instance.trees;
+        List<PlantController> trees = GameController.instance.trees;
         int targetIndex = 0;
         float closestDist = TreeClosest(trees[targetIndex]);
 

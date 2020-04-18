@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Fire : MonoBehaviour
 {
- 
+
     public SpriteRenderer spriteRenderer;
     Color color;
-    public TreeController tree;
+    public PlantController tree;
 
     bool spread;
 
@@ -18,17 +18,17 @@ public class Fire : MonoBehaviour
         fireSize = 0;
         color = spriteRenderer.color;
         transform.localPosition = Vector3.zero;
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (tree.health>0)
+        if (tree.health > 0)
         {
             spriteRenderer.color = color * (0.9f + Mathf.Cos(Time.time * 100) / 10);
             transform.localScale = Vector3.one * fireSize;
-            fireSize = (1f - Mathf.Pow(tree.health / tree.maxHealth*2 - 1, 2)) * tree.spriteRenderer.sprite.bounds.size.x;
+            fireSize = (1f - Mathf.Pow(tree.health / tree.maxHealth * 2 - 1, 2)) * tree.spriteRenderer.sprite.bounds.size.x;
             tree.health -= tree.flammability * Time.deltaTime;
 
             float h = Mathf.Max(tree.health / tree.maxHealth, 0.3f);
@@ -37,7 +37,7 @@ public class Fire : MonoBehaviour
             {
                 if (tree.health > 40 && tree.health < 60)
                 {
-                    List<TreeController> trees = GameController.instance.trees;
+                    List<PlantController> trees = GameController.instance.trees;
 
 
                     for (int i = 0; i < trees.Count; i++)

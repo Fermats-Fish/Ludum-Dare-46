@@ -8,7 +8,7 @@ public class GameController : MonoBehaviour
 
     public GameObject treePrefab;
 
-    public List<TreeController> trees = new List<TreeController>();
+    public List<PlantController> trees = new List<PlantController>();
 
     const float TREE_UPDATE_PERIOD = 5f;
 
@@ -46,7 +46,7 @@ public class GameController : MonoBehaviour
     {
         // Instantiate the new tree.
         var newTreeGO = Instantiate(treePrefab, new Vector3(position.x, position.y, 0), Quaternion.identity);
-        var newTreeController = newTreeGO.GetComponent<TreeController>();
+        var newTreeController = newTreeGO.GetComponent<PlantController>();
 
         // Init the tree.
         newTreeController.Initialise(selectedPlantType);
