@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour
     public TreeController target;
 
     float timeSinceAttack;
-
+    Vector3 position;
     public float health;
 
     // Start is called before the first frame update
@@ -20,6 +20,7 @@ public class Enemy : MonoBehaviour
     {
         timeSinceAttack = attackPeriod;
         health = 100;
+        position = transform.position;
     }
 
     // Update is called once per frame
@@ -105,4 +106,30 @@ public class Enemy : MonoBehaviour
         transform.position += speed * direction * Time.deltaTime;
     }
 
+
+    public void Attacked(float attack)
+    {
+        health -= attack;
+        StartCoroutine("Shake");
+        if (health < 0)
+        {
+            OnDeath();
+        }
+    }
+
+    IEnumerator Shake()
+    {
+        for (float t = 1; t >= 0; t -= 0.1f)
+        {
+            transform.position = position + Mathf.Cos(10 * t) / 10 * Vector3.right;
+            yield return null;
+        }
+    }
+
+    public void OnDeath()
+    {
+        attackMode = false;
+        transform.position = home.position;
+        health = 100;
+    }
 }

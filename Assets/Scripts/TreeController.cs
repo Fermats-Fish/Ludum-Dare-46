@@ -45,6 +45,12 @@ public class TreeController : MonoBehaviour
         }
     }
 
+    public void OnDeath()
+    {
+        GameController.instance.trees.Remove(this);
+        Destroy(gameObject, .5f);
+    }
+
     public void Grow()
     {
         age += 1;
@@ -54,8 +60,5 @@ public class TreeController : MonoBehaviour
         GameController.instance.carbon += treeSize;
     }
 
-    public void OnDeath() {
-        GameController.instance.trees.Remove(this);
-        Destroy(gameObject, .5f);     
-    }
+    
 }
