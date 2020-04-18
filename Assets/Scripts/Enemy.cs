@@ -76,7 +76,7 @@ public class Enemy : MonoBehaviour
 
         for (int i = 0; i < trees.Count; i++)
         {
-            if (!trees[i].beingChoppedDown)
+            if (!trees[i].beingChoppedDown&&!trees[i].onFire)
             {
                 float d = TreeClosest(trees[i]);
                 if (d < closestDist)
