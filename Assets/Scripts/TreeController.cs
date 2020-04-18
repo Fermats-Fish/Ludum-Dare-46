@@ -5,10 +5,11 @@ using UnityEngine;
 public class TreeController : MonoBehaviour
 {
     public const int TREE_Z = 0;
-    float maxHealth = 100;
+    public float maxHealth = 100;
     public float health;
-
-    SpriteRenderer spriteRenderer;
+    public float flammability;
+    public bool onFire = false;
+    public SpriteRenderer spriteRenderer;
     Vector3 position;
 
     int MAX_CARBON_PRODUCED = 100;
@@ -31,15 +32,16 @@ public class TreeController : MonoBehaviour
 
     void Update()
     {
-
+        if (health < 0)
+        {
+            OnDeath();
+        }
     }
 
     public void Attacked(float attack) {
         health -= attack;
         StartCoroutine("Shake");
-        if (health < 0) {
-            OnDeath();
-        }
+        
     }
 
     IEnumerator Shake() {
@@ -49,9 +51,27 @@ public class TreeController : MonoBehaviour
         }
     }
 
+    IEnumerator Fade()
+    {
+        float fadeTime = 10;
+        Color c = spriteRenderer.color;
+        for (float t = fadeTime; t >= 0; t -= 0.1f)
+        {
+            spriteRenderer.color = c * t/fadeTime;
+            yield return null;
+        }
+    }
+
     public void OnDeath()
     {
         GameController.instance.trees.Remove(this);
+        if (onFire) {
+            StartCoroutine("Fade");
+            Destroy(gameObject, 5f);
+            return;
+        }
+        
+        
         Destroy(gameObject, .5f);
     }
 

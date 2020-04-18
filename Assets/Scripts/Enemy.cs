@@ -73,7 +73,7 @@ public class Enemy : MonoBehaviour
         for (int i = 0; i < trees.Count; i++)
         {
             float d = TreeClosest(trees[i]);
-            print(d);
+          
             if (d < closestDist) {
                 
                 closestDist = d;
