@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
- 
+
     public Transform home;
     public bool attackMode;
     public Vector3 direction;
@@ -52,30 +52,33 @@ public class Enemy : MonoBehaviour
 
             }
         }
-        else {
+        else
+        {
             GoHome();
         }
         timeSinceAttack += Time.deltaTime;
     }
 
-    float TreeClosest(TreeController tree) {
+    float TreeClosest(TreeController tree)
+    {
         float closestLocal = Vector3.SqrMagnitude(tree.transform.position - transform.position) + Vector3.SqrMagnitude(tree.transform.position - home.position);
-            return closestLocal;
+        return closestLocal;
     }
 
-  
 
-    void LookForTree() {
+
+    void LookForTree()
+    {
         List<TreeController> trees = GameController.instance.trees;
         int targetIndex = 0;
         float closestDist = TreeClosest(trees[targetIndex]);
-        
+
         for (int i = 0; i < trees.Count; i++)
         {
             float d = TreeClosest(trees[i]);
-            print(d);
-            if (d < closestDist) {
-                
+            if (d < closestDist)
+            {
+
                 closestDist = d;
                 targetIndex = i;
             }
@@ -84,19 +87,22 @@ public class Enemy : MonoBehaviour
         //print("found tree at " + target.transform.position);
 
     }
-    void AttackTree() {
-        
+    void AttackTree()
+    {
+
         target.Attacked(attack);
         timeSinceAttack = 0;
-        if (target.health < 0) {
-            
+        if (target.health < 0)
+        {
+
             target = null;
-            
+
         }
 
     }
 
-    void GoToTree() {
+    void GoToTree()
+    {
         direction = (target.transform.position - transform.position).normalized;
         transform.position += speed * direction * Time.deltaTime;
     }

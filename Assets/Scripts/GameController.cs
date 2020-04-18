@@ -33,22 +33,23 @@ public class GameController : MonoBehaviour
         {
             Vector3 x = Random.onUnitSphere;
             Vector2 coord = new Vector2(x.x, x.y);
-            coord = coord.normalized * Random.Range(0f, 10f);
-            CreateTree(coord);
+            coord = coord.normalized * Mathf.Sqrt(Random.Range(0f, 1f)) * 10f;
+            CreateTree(coord, PlantType.plantTypes[Random.Range(0, PlantType.plantTypes.Count)]);
         }
+
 
         UIController.instance.UpdateCarbonText();
 
     }
 
-    void CreateTree(Vector2 position)
+    public void CreateTree(Vector2 position, PlantType selectedPlantType)
     {
         // Instantiate the new tree.
         var newTreeGO = Instantiate(treePrefab, new Vector3(position.x, position.y, TreeController.TREE_Z), Quaternion.identity);
         var newTreeController = newTreeGO.GetComponent<TreeController>();
 
-        // Add to the list of trees.
-        trees.Add(newTreeController);
+        // Init the tree.
+        newTreeController.Initialise(selectedPlantType);
     }
 
     void Update()
