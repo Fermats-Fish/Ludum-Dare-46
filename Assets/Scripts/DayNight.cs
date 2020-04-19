@@ -17,6 +17,7 @@ public class DayNight : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        transform.localScale = Vector3.one * Camera.main.orthographicSize*100;
         
         if (GameController.instance.timeOfDay > 0.2f) {
             if (GameController.instance.timeOfDay < 0.75f)
