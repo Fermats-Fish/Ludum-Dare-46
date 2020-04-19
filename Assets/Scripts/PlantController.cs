@@ -101,6 +101,9 @@ public class PlantController : MonoBehaviour
 
         long carbonProduced = Mathf.FloorToInt(plantType.maxCarbonProduction * Mathf.Pow(1 - 100f / (100f + plantType.matureTime * age), 10));
         GameController.instance.AddToCarbon(carbonProduced);
+
+        long waterProduced = Mathf.FloorToInt(plantType.surplessWaterProd * Mathf.Pow(1 - 100f / (100f + plantType.matureTime * age), 10));
+        GameController.instance.AddToWater(waterProduced);
     }
 
     public void SetAge(int newAge)

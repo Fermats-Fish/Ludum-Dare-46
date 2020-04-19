@@ -19,6 +19,7 @@ public class GameController : MonoBehaviour
     float treeTimer = 0f, dayTimer = 0f;
 
     long carbon = 0;
+    long water = 0;
 
     public float timeOfDay;
     public int daysSurvived;
@@ -73,6 +74,7 @@ public class GameController : MonoBehaviour
 
 
         UIController.instance.OnCarbonChanged();
+        UIController.instance.OnWaterChanged();
 
     }
 
@@ -145,5 +147,41 @@ public class GameController : MonoBehaviour
 
         // Tell the UIController to update which buttons are enabled.
         UIController.instance.OnCarbonChanged();
+    }
+
+    public long GetWater()
+    {
+        return water;
+    }
+
+    public bool TrySubtractWater(long delta)
+    {
+        if (GetWater() < delta)
+        {
+            return false;
+        }
+        else
+        {
+            SetWater(water - delta);
+            return true;
+        }
+    }
+
+    void SetWater(long newWater)
+    {
+        water = newWater;
+
+        // Tell the UIController to update which buttons are enabled.
+        UIController.instance.OnWaterChanged();
+    }
+
+    public void AddToWater(long delta)
+    {
+        if (delta < 0)
+        {
+            Debug.LogError("Trying to add a negative amount of water. Use TrySubtractWater instead.");
+        }
+
+        SetWater(water + delta);
     }
 }

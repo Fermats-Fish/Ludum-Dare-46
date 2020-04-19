@@ -12,6 +12,8 @@ public class UIController : MonoBehaviour
 
     public Text carbonText;
 
+    public Text waterText;
+
     public Transform plantSelectPanel;
 
     public Dictionary<PlantType, PlantButton> plantButtons = new Dictionary<PlantType, PlantButton>();
@@ -142,5 +144,10 @@ public class UIController : MonoBehaviour
             plantButtons.TryGetValue(plantType, out button);
             button.button.interactable = GameController.instance.GetCarbon() >= plantType.carbonBuildCost;
         }
+    }
+
+    public void OnWaterChanged()
+    {
+        waterText.text = "Water: " + (GameController.instance.GetWater() / 10000f).ToString("0.00");
     }
 }
