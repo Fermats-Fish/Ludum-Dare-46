@@ -6,7 +6,7 @@ public class Fire : MonoBehaviour
 {
 
     public SpriteRenderer spriteRenderer;
-    Color color;
+    Color color,treeColor;
     public PlantController tree;
 
     bool spread;
@@ -18,45 +18,55 @@ public class Fire : MonoBehaviour
         fireSize = 0;
         color = spriteRenderer.color;
         transform.localPosition = Vector3.zero;
+        
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (tree.health > 0)
-        {
-            spriteRenderer.color = color * (0.9f + Mathf.Cos(Time.time * 100) / 10);
-            transform.localScale = Vector3.one * fireSize;
-            fireSize = (1f - Mathf.Pow(tree.health / tree.maxHealth * 2 - 1, 2)) * tree.spriteRenderer.sprite.bounds.size.x;
-            tree.health -= tree.flammability * Time.deltaTime;
-
-            float h = Mathf.Max(tree.health / tree.maxHealth, 0.3f);
-            tree.spriteRenderer.color = new Color(h, h, h, 1);
-            if (!spread)
+        if (tree != null) {
+            transform.localScale = Vector3.one * tree.spriteRenderer.sprite.bounds.size.x;
+            if (tree.health > 0)
             {
-                if (tree.health > 40 && tree.health < 60)
+
+                spriteRenderer.color = color * (0.9f + Mathf.Cos(Time.time * 10) / 10)*fireSize;
+                //stransform.localScale = Vector3.one * fireSize;
+                fireSize = (1f - Mathf.Pow(tree.health / tree.maxHealth * 2 - 1, 2));
+                tree.health -= tree.flammability * Time.deltaTime;
+
+                float h = Mathf.Max(tree.health / tree.maxHealth, 0.3f);
+                tree.spriteRenderer.color = new Color(h*treeColor.r, h * treeColor.g, h * treeColor.b, 1);
+                if (!spread)
                 {
-                    List<PlantController> trees = GameController.instance.trees;
-
-
-                    for (int i = 0; i < trees.Count; i++)
+                    if (tree.health > 40 && tree.health < 60)
                     {
-                        if (!trees[i].onFire)
+                        List<PlantController> trees = GameController.instance.trees;
+
+
+                        for (int i = 0; i < trees.Count; i++)
                         {
-                            if (Vector3.Distance(transform.position, trees[i].transform.position) < fireSize * 2)
+                            if (!trees[i].onFire)
                             {
-                                Fire f = Instantiate(gameObject, trees[i].transform).GetComponent<Fire>();
-                                f.tree = trees[i];
-                                f.fireSize = 0;
-                                trees[i].onFire = true;
+                                if (Vector3.Distance(transform.position, trees[i].transform.position) < fireSize * 2)
+                                {
+                                    Spread(trees[i]);
+                                }
                             }
                         }
-                    }
 
-                    spread = true;
+                        spread = true;
+                    }
                 }
             }
         }
+    }
+
+    public void Spread(PlantController plant) {
+        Fire f = Instantiate(gameObject, plant.transform).GetComponent<Fire>();
+        f.tree = plant;
+        f.fireSize = 0;
+        plant.onFire = true;
+        f.treeColor = plant.spriteRenderer.color; 
     }
 }

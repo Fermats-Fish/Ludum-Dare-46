@@ -10,13 +10,17 @@ public class UIController : MonoBehaviour
 
     public GameObject plantTypeButtonPrefab;
 
+    public GameObject waterToolButtonPrefab;
+
     public Text carbonText;
 
-    public Transform plantSelectPanel;
+    public Text waterText;
 
-    public Dictionary<PlantType, PlantButton> plantButtons = new Dictionary<PlantType, PlantButton>();
+    public Transform toolSelectPanel;
 
-    public PlantType selectedPlantType;
+    public List<Tool> tools;
+
+    public Tool selectedTool;
 
     // The "ghost" plant you see when going to place a new plant before you actually place it.
     GameObject plantGhost;
@@ -40,30 +44,35 @@ public class UIController : MonoBehaviour
         // Generate a button for each plant type.
         foreach (var plantType in PlantType.plantTypes)
         {
-            var button = Instantiate(plantTypeButtonPrefab, plantSelectPanel).GetComponent<PlantButton>();
+            var button = Instantiate(plantTypeButtonPrefab, toolSelectPanel).GetComponent<PlantButton>();
             button.Initialise(plantType);
         }
 
+        // Add the water button.
+        Instantiate(waterToolButtonPrefab, toolSelectPanel).GetComponent<WaterTool>().Initialise();
+
     }
 
-    public void SwitchToPlantType(PlantType plantType)
+    public void SetupPlantGhost(PlantType plantType)
     {
-        // Deselect selected button.
-        DeselctPlantType();
-
-        // Update selected plant type.
-        selectedPlantType = plantType;
 
         // Instantiate a ghost plant.
         plantGhost = Instantiate(plantGhostPrefab);
-        plantType.InitSRVisuals(plantGhost.GetComponent<SpriteRenderer>());
+        plantType.InitSRVisuals(plantGhost.GetComponent<SpriteRenderer>(), 1);
 
         UpdateGhostPosition();
+    }
+
+    public void SwitchToTool(Tool newTool)
+    {
+        // Deselect selected button.
+        DeselectTool();
+
+        // Update selected tool.
+        selectedTool = newTool;
 
         // Select new button.
-        PlantButton button;
-        plantButtons.TryGetValue(plantType, out button);
-        button.Select();
+        selectedTool.Select();
     }
 
     void UpdateGhostPosition()
@@ -79,13 +88,11 @@ public class UIController : MonoBehaviour
         plantGhost = null;
     }
 
-    void DeselctPlantType()
+    void DeselectTool()
     {
-        if (selectedPlantType != null)
+        if (selectedTool != null)
         {
-            PlantButton button;
-            plantButtons.TryGetValue(selectedPlantType, out button);
-            button.Deselect();
+            selectedTool.Deselect();
 
             // If there is an old plant ghost delete it.
             if (plantGhost != null)
@@ -93,14 +100,14 @@ public class UIController : MonoBehaviour
                 DeleteGhost();
             }
 
-            selectedPlantType = null;
+            selectedTool = null;
         }
     }
 
     void Update()
     {
-        // If there is a plant type selected...
-        if (selectedPlantType != null)
+        // If there is a tool selected...
+        if (selectedTool != null)
         {
             // If there is a ghost visual...
             if (plantGhost != null)
@@ -109,29 +116,45 @@ public class UIController : MonoBehaviour
                 UpdateGhostPosition();
             }
 
-            // Click to place plant.
-            if (Input.GetMouseButtonDown(0))
+            // Click uses the tool if not hovering on ui.
+            if (Input.GetMouseButtonDown(0) && !MouseOverUI())
             {
-                Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                GameController.instance.CreateTree(new Vector2(pos.x, pos.y), selectedPlantType);
+                bool deselect = selectedTool.UseTool();
 
-                // If not holding control, deselct the plant type...
-                if (!Input.GetKey(KeyCode.LeftControl))
+                if (deselect)
                 {
-                    DeselctPlantType();
+                    DeselectTool();
                 }
             }
 
             // Right click or esc to cancel.
             if (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.Escape))
             {
-                DeselctPlantType();
+                DeselectTool();
             }
         }
     }
 
-    public void UpdateCarbonText()
+    public static bool MouseOverUI()
     {
-        carbonText.text = "Carbon: " + (GameController.instance.carbon / 10000f).ToString("0.00");
+        return UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
+    }
+
+    public void OnCarbonChanged()
+    {
+        carbonText.text = "Carbon: " + (GameController.instance.GetCarbon() / 10000f).ToString("0.00");
+        foreach (Tool tool in tools)
+        {
+            tool.UpdateInteractable();
+        }
+    }
+
+    public void OnWaterChanged()
+    {
+        foreach (Tool tool in tools)
+        {
+            tool.UpdateInteractable();
+        }
+        waterText.text = "Water: " + (GameController.instance.GetWater() / 10000f).ToString("0.00");
     }
 }

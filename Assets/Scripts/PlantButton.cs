@@ -3,34 +3,37 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlantButton : MonoBehaviour
+public class PlantButton : Tool
 {
     PlantType plantType;
-    Image image;
-
-    static readonly Color DESELECTED_COLOR = new Color(1f, 1f, 1f, 43f / 255f);
-    static readonly Color SELECTED_COLOR = new Color(1f, 1f, 1f, 100f / 255f);
 
     public void Initialise(PlantType plantType)
     {
-        UIController.instance.plantButtons.Add(plantType, this);
+        base.Initialise();
         this.plantType = plantType;
         GetComponentInChildren<Text>().text = "Plant " + plantType.name;
-        image = GetComponent<Image>();
     }
 
-    public void Press()
+    public override bool UseTool()
     {
-        UIController.instance.SwitchToPlantType(plantType);
+        if (GameController.instance.TrySubtractCarbon(plantType.carbonBuildCost))
+        {
+            Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            GameController.instance.CreatePlant(new Vector2(pos.x, pos.y), plantType);
+        }
+
+        // If not holding control, deselct the plant type...
+        return !Input.GetKey(KeyCode.LeftControl);
     }
 
-    public void Deselect()
+    public override void UpdateInteractable()
     {
-        image.color = DESELECTED_COLOR;
+        button.interactable = GameController.instance.GetCarbon() >= plantType.carbonBuildCost;
     }
 
-    public void Select()
+    public override void Select()
     {
-        image.color = SELECTED_COLOR;
+        base.Select();
+        UIController.instance.SetupPlantGhost(plantType);
     }
 }

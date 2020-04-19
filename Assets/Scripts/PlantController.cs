@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class PlantController : MonoBehaviour
 {
-    public float maxHealth = 100;
+    public float maxHealth;
     public float health;
     public float flammability;
-    public bool onFire = false;
+    public bool onFire = false, beingChoppedDown = false;
+
     public SpriteRenderer spriteRenderer;
     Vector3 position;
 
-    int age = 1;
+    int age;
     const float SCALE = 1f;
 
     public PlantType plantType;
@@ -26,13 +27,15 @@ public class PlantController : MonoBehaviour
 
         // Set the sprite.
         spriteRenderer = GetComponent<SpriteRenderer>();
-        plantType.InitSRVisuals(spriteRenderer);
+        plantType.InitSRVisuals(spriteRenderer, age);
 
         // Init some things.
+        maxHealth = plantType.health;
         health = maxHealth;
         position = transform.position;
         transform.position = new Vector3(position.x, position.y, position.y / 10);
-        Grow();
+
+        SetAge(1);
 
     }
 
@@ -84,7 +87,7 @@ public class PlantController : MonoBehaviour
         if (onFire)
         {
             StartCoroutine("Fade");
-            Destroy(gameObject, 5f);
+            Destroy(gameObject, 10f);
             return;
         }
 
@@ -94,11 +97,21 @@ public class PlantController : MonoBehaviour
 
     public void Grow()
     {
-        age += 1;
-        long treeSize = Mathf.FloorToInt(plantType.maxCarbonProduction * Mathf.Pow(1 - 1f / age, 0.1f));
+        SetAge(age + 1);
 
-        transform.localScale = Vector3.one * treeSize / plantType.maxCarbonProduction;
-        GameController.instance.carbon += treeSize;
+        long carbonProduced = Mathf.FloorToInt(plantType.maxCarbonProduction * Mathf.Pow(1 - 100f / (100f + plantType.matureTime * age), 10));
+        GameController.instance.AddToCarbon(carbonProduced);
+
+        long waterProduced = Mathf.FloorToInt(plantType.surplessWaterProd * Mathf.Pow(1 - 100f / (100f + plantType.matureTime * age), 10));
+        GameController.instance.AddToWater(waterProduced);
+    }
+
+    public void SetAge(int newAge)
+    {
+        age = newAge;
+
+        // Visuals might have changed.
+        plantType.InitSRVisuals(spriteRenderer, age);
     }
 
 

@@ -11,21 +11,38 @@ public class Enemy : MonoBehaviour
     public float speed, attack, attackPeriod;
     public PlantController target;
 
-    float timeSinceAttack;
+    protected float timeSinceAttack;
     Vector3 position;
     public float health;
 
+    float bearSightRange = 3f;
+
     // Start is called before the first frame update
-    void Start()
+    public void Init()
     {
         timeSinceAttack = attackPeriod;
         health = 100;
         position = transform.position;
+        attackMode = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        // Check for nearby bear.
+        var colliders = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), bearSightRange);
+        foreach (var collider in colliders)
+        {
+            AnimalController ac = collider.GetComponent<AnimalController>();
+            if (ac != null && ac.animalType == AnimalType.animalTypes.Find(x => x.name == "Bear"))
+            {
+                // Run away from this animal.
+                GoHome();
+                timeSinceAttack += Time.deltaTime;
+                return;
+            }
+        }
+
         if (attackMode)
         {
 
@@ -47,9 +64,6 @@ public class Enemy : MonoBehaviour
 
                 LookForTree();
 
-                //print("looking for tree");
-
-
             }
         }
         else
@@ -67,27 +81,37 @@ public class Enemy : MonoBehaviour
 
 
 
-    void LookForTree()
+    protected virtual void LookForTree()
     {
         List<PlantController> trees = GameController.instance.trees;
+
+        if (trees.Count == 0)
+        {
+            attackMode = false;
+            return;
+        }
+
         int targetIndex = 0;
         float closestDist = TreeClosest(trees[targetIndex]);
 
         for (int i = 0; i < trees.Count; i++)
         {
-            float d = TreeClosest(trees[i]);
-            if (d < closestDist)
+            if (!trees[i].beingChoppedDown && !trees[i].onFire)
             {
+                float d = TreeClosest(trees[i]);
+                if (d < closestDist)
+                {
 
-                closestDist = d;
-                targetIndex = i;
+                    closestDist = d;
+                    targetIndex = i;
+                }
             }
         }
         target = trees[targetIndex];
-        //print("found tree at " + target.transform.position);
+        target.beingChoppedDown = true;
 
     }
-    void AttackTree()
+    protected virtual void AttackTree()
     {
 
         target.Attacked(attack);
@@ -104,12 +128,14 @@ public class Enemy : MonoBehaviour
     void GoToTree()
     {
         direction = (target.transform.position - transform.position).normalized;
+       
         transform.position += speed * direction * Time.deltaTime;
     }
     void GoHome()
     {
         direction = (home.position - transform.position).normalized;
         transform.position += speed * direction * Time.deltaTime;
+       
     }
 
 

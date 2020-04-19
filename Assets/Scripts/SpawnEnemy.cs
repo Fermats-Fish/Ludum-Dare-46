@@ -7,7 +7,9 @@ public class SpawnEnemy : MonoBehaviour
     public int numberOfEnemies;
     public GameObject enemyPrefab;
     List<Enemy> enemies = new List<Enemy>();
-
+    public float HOME_TIME = 0.75f, ATTACK_TIME = 0.25f;
+ 
+    int currentDay = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -18,6 +20,7 @@ public class SpawnEnemy : MonoBehaviour
             newEnemy.home = transform;
             newEnemy.transform.position = transform.position;
             enemies.Add(newEnemy);
+            newEnemy.Init();
         }
 
     }
@@ -26,6 +29,24 @@ public class SpawnEnemy : MonoBehaviour
     void Update()
     {
 
+        if (GameController.instance.timeOfDay > ATTACK_TIME & GameController.instance.timeOfDay < ATTACK_TIME + 0.1f)
+        {
+            SendOutAllEnemies();
+         
+        }
+
+
+
+        if (GameController.instance.timeOfDay > HOME_TIME & GameController.instance.timeOfDay < HOME_TIME + 0.1f)
+        {
+            RecallEnemies();
+        }
+
+        if (currentDay < GameController.instance.daysSurvived)
+        {
+            currentDay = GameController.instance.daysSurvived;
+           
+        }
     }
     public void SendOutAnEnemy()
     {
@@ -37,6 +58,7 @@ public class SpawnEnemy : MonoBehaviour
                 return;
             }
         }
+
     }
 
     public void SendOutAllEnemies()
