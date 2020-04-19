@@ -511,8 +511,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   treePrefab: {fileID: 7318170635542595064, guid: cab51f636a96a6840b5ca1917d57fdd5,
     type: 3}
+  animalPrefab: {fileID: 5674797521099206790, guid: d80188f5d3d09bf45adea8776e0fe268,
+    type: 3}
   trees: []
-  carbon: 0
 --- !u!4 &669162829
 Transform:
   m_ObjectHideFlags: 0

@@ -8,6 +8,8 @@ public class GameController : MonoBehaviour
 
     public GameObject treePrefab;
 
+    public GameObject animalPrefab;
+
     public List<PlantController> trees = new List<PlantController>();
 
     const float TREE_UPDATE_PERIOD = 5f;
@@ -28,14 +30,40 @@ public class GameController : MonoBehaviour
             instance = this;
         }
 
+        // Init the animal types.
+        AnimalType.InitAnimalTypes();
+
         // Place some inital trees.
         for (int i = 0; i < 100; i++)
         {
-            Vector3 x = Random.onUnitSphere;
-            Vector2 coord = new Vector2(x.x, x.y);
+            Vector3 c = Random.onUnitSphere;
+            Vector2 coord = new Vector2(c.x, c.y);
             coord = coord.normalized * Mathf.Sqrt(Random.Range(0f, 1f)) * 10f;
             PlantController newPlant = CreatePlant(coord, PlantType.plantTypes[Random.Range(0, PlantType.plantTypes.Count)]);
             newPlant.SetAge(Random.Range(1, newPlant.plantType.matureTime));
+        }
+
+        var deer = AnimalType.animalTypes.Find(x => x.name == "Deer");
+        var bear = AnimalType.animalTypes.Find(x => x.name == "Bear");
+
+
+        // Place some initial animals.
+        for (int i = 0; i < 20; i++)
+        {
+            Vector3 c = Random.onUnitSphere;
+            Vector2 coord = new Vector2(c.x, c.y);
+            coord = coord.normalized * Mathf.Sqrt(Random.Range(0f, 1f)) * 10f;
+            GameObject animalGO = Instantiate(animalPrefab, coord, Quaternion.identity);
+            animalGO.GetComponent<AnimalController>().Initialise(deer);
+        }
+
+        for (int i = 0; i < 2; i++)
+        {
+            Vector3 c = Random.onUnitSphere;
+            Vector2 coord = new Vector2(c.x, c.y);
+            coord = coord.normalized * Mathf.Sqrt(Random.Range(0f, 1f)) * 10f;
+            GameObject animalGO = Instantiate(animalPrefab, coord, Quaternion.identity);
+            animalGO.GetComponent<AnimalController>().Initialise(bear);
         }
 
 

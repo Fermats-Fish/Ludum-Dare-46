@@ -7,8 +7,10 @@ public class PlantType
 
     public static List<PlantType> plantTypes = new List<PlantType>
     {
-        new PlantType("Oak", Color.white, 20, 20, 150, 200, .8f, 10, 100),
-        new PlantType("Pine", new Color(0.5f, 0.5f, 0.5f), 40, 40, 100, 100, 1f, 5, 30)
+        //            Name                Color,                   Water Requirement, Water Absorbtion, Carbon Prod, Mature Time, Speed Mod, Build Cost, Helath
+        new PlantType("Oak",              Color.white,             20,                20,                150,         200,          0.8f,     20,         100),
+        new PlantType("Pine",         new Color(0.5f, 0.5f, 0.5f), 40,                40,                100,         100,          1f,       10,          30),
+        new PlantType("Fruit Tree",   new Color(0.7f, 0f, 0.7f),   50,                30,                 50,         300,          0.9f,     35,         200)
     };
 
     public string name;
@@ -38,7 +40,7 @@ public class PlantType
         this.matureTime = matureTime;
         this.terrainSpeedModifier = terrainSpeedModifier;
         this.color = color;
-        this.carbonBuildCost = carbonBuildCost * 10000;
+        this.carbonBuildCost = carbonBuildCost * 1000;
         this.health = health;
     }
 
