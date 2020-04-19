@@ -94,8 +94,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9401ae964521e3458302d706043a55b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numberOfEnemies: 3
+  numberOfEnemies: 1
   enemyPrefab: {fileID: 2710513509355314076, guid: f02002c19dc554b418c7ee0f427de795,
     type: 3}
-  HOME_TIME: 0.25
+  HOME_TIME: 2
   ATTACK_TIME: 0.9
