@@ -6,7 +6,7 @@ public class Fire : MonoBehaviour
 {
 
     public SpriteRenderer spriteRenderer;
-    Color color;
+    Color color,treeColor;
     public PlantController tree;
 
     bool spread;
@@ -27,13 +27,13 @@ public class Fire : MonoBehaviour
         if (tree != null) {
             if (tree.health > 0)
             {
-                spriteRenderer.color = color * (0.9f + Mathf.Cos(Time.time * 100) / 10);
+                spriteRenderer.color = color * (0.9f + Mathf.Cos(Time.time * 10) / 10);
                 transform.localScale = Vector3.one * fireSize;
                 fireSize = (1f - Mathf.Pow(tree.health / tree.maxHealth * 2 - 1, 2)) * tree.spriteRenderer.sprite.bounds.size.x;
                 tree.health -= tree.flammability * Time.deltaTime;
 
                 float h = Mathf.Max(tree.health / tree.maxHealth, 0.3f);
-                tree.spriteRenderer.color = new Color(h, h, h, 1);
+                tree.spriteRenderer.color = new Color(h*treeColor.r, h * treeColor.g, h * treeColor.b, 1);
                 if (!spread)
                 {
                     if (tree.health > 40 && tree.health < 60)
@@ -64,5 +64,6 @@ public class Fire : MonoBehaviour
         f.tree = plant;
         f.fireSize = 0;
         plant.onFire = true;
+        f.treeColor = plant.spriteRenderer.color; 
     }
 }

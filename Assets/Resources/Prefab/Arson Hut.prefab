@@ -70,7 +70,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 4945b0bab7f45db4ba7a1747b2928bdd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -97,5 +97,5 @@ MonoBehaviour:
   numberOfEnemies: 1
   enemyPrefab: {fileID: 2710513509355314076, guid: f02002c19dc554b418c7ee0f427de795,
     type: 3}
-  HOME_TIME: 2
-  ATTACK_TIME: 0.9
+  HOME_TIME: 0.2
+  ATTACK_TIME: 0.7

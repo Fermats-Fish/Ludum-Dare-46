@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour
     public float speed, attack, attackPeriod;
     public PlantController target;
 
-    float timeSinceAttack;
+    protected float timeSinceAttack;
     Vector3 position;
     public float health;
 
@@ -128,12 +128,14 @@ public class Enemy : MonoBehaviour
     void GoToTree()
     {
         direction = (target.transform.position - transform.position).normalized;
+       
         transform.position += speed * direction * Time.deltaTime;
     }
     void GoHome()
     {
         direction = (home.position - transform.position).normalized;
         transform.position += speed * direction * Time.deltaTime;
+       
     }
 
 
