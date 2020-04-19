@@ -97,13 +97,16 @@ public class PlantController : MonoBehaviour
 
     public void Grow()
     {
-        SetAge(age + 1);
+        if (!(onFire || beingChoppedDown))
+        {
+            SetAge(age + 1);
 
-        long carbonProduced = Mathf.FloorToInt(plantType.maxCarbonProduction * Mathf.Pow(1 - 100f / (100f + plantType.matureTime * age), 10));
-        GameController.instance.AddToCarbon(carbonProduced);
+            long carbonProduced = Mathf.FloorToInt(plantType.maxCarbonProduction * Mathf.Pow(1 - 100f / (100f + plantType.matureTime * age), 10));
+            GameController.instance.AddToCarbon(carbonProduced);
 
-        long waterProduced = Mathf.FloorToInt(plantType.surplessWaterProd * Mathf.Pow(1 - 100f / (100f + plantType.matureTime * age), 10));
-        GameController.instance.AddToWater(waterProduced);
+            long waterProduced = Mathf.FloorToInt(plantType.surplessWaterProd * Mathf.Pow(1 - 100f / (100f + plantType.matureTime * age), 10));
+            GameController.instance.AddToWater(waterProduced);
+        }
     }
 
     public void SetAge(int newAge)
