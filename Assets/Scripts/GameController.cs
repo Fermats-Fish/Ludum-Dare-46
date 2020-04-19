@@ -12,9 +12,9 @@ public class GameController : MonoBehaviour
 
     public List<PlantController> trees = new List<PlantController>();
 
+    const int GRID_SIZE = 200;
 
     const float TREE_UPDATE_PERIOD = 5f, DAY_LENGTH = 60f;
-
 
     float treeTimer = 0f, dayTimer = 0f;
 
@@ -23,6 +23,8 @@ public class GameController : MonoBehaviour
 
     public float timeOfDay;
     public int daysSurvived;
+
+    public GameObject terrainPrefab;
 
     void Start()
     {
@@ -36,6 +38,33 @@ public class GameController : MonoBehaviour
             instance = this;
         }
 
+        // Generate terrain
+        TileController tc = new TileController(GRID_SIZE);
+        tc.InitGrid();
+        foreach (List<Tile> gridX in tc.grid)
+        {
+            foreach (Tile t in gridX)
+            {
+                var terrainGameObject = Instantiate(terrainPrefab, t.location, Quaternion.identity);
+                terrainGameObject.GetComponent<SpriteRenderer>().sprite = t.sprite;
+                terrainGameObject.GetComponent<SpriteRenderer>().material.color = t.color;
+
+                // Add marsh ponds if required
+                if (t.isMarshy)
+                {
+                    foreach (MarshSubTile m in t.marsh)
+                    {
+                        var marshGameObject = Instantiate(terrainPrefab, m.location, Quaternion.Euler(new Vector3(0, 0, (int)(m.rotation*360))));
+                        var sr = marshGameObject.GetComponent<SpriteRenderer>();
+                        sr.sprite = m.sprite;
+                        sr.flipX = m.flipX;
+                        sr.flipY = m.flipY;
+                        sr.material.color = new Color(0.0f, 0.05f, 0.4f);
+                    }
+                }
+            }
+        }
+        
         // Init the animal types.
         AnimalType.InitAnimalTypes();
 
