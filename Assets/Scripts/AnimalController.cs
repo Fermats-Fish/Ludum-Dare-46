@@ -14,9 +14,12 @@ public class AnimalController : MonoBehaviour
 
     const float MAX_TIME_BETWEEN_TARGETS = 10f;
 
+    int health;
+
     public void Initialise(AnimalType animalType)
     {
         this.animalType = animalType;
+        health = animalType.health;
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sprite = Resources.Load<Sprite>("Sprites/animals/" + animalType.name);
     }
@@ -124,7 +127,54 @@ public class AnimalController : MonoBehaviour
             return;
         }
 
-        // Nothing there either. Just move somewhere random.
+        // Move towards a plant?
+        if (animalType.attractedToPlants.Count > 0)
+        {
+            // Whether we move to a plant.
+            bool moveToPlant = true;
+
+            // If we aren't in eye sight of one of our favourite plants, move to the closest one.
+            colliders = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), animalType.sightRange);
+            foreach (var collider in colliders)
+            {
+                PlantController pc = collider.GetComponent<PlantController>();
+                if (pc != null && animalType.attractedToPlants.Find(x => x == pc.plantType) != null)
+                {
+                    // We are close to one.
+                    moveToPlant = false;
+                    break;
+                }
+            }
+
+            if (moveToPlant)
+            {
+                float closest = Mathf.Infinity;
+                possibleTargets = new List<Vector3>();
+                foreach (var plant in GameController.instance.trees)
+                {
+                    if (animalType.attractedToPlants.Find(x => x == plant.plantType) != null)
+                    {
+                        possibleTargets.Add(plant.transform.position);
+                    }
+                }
+                foreach (var possibleTarget in possibleTargets)
+                {
+                    var sqrMag = (possibleTarget - transform.position).sqrMagnitude;
+                    if (sqrMag < closest)
+                    {
+                        closest = sqrMag;
+                        target = possibleTarget;
+
+                        // Make the time before the next target check be at most the time it will take to reach the target's current position.
+                        timer = Random.Range(0f, (target - transform.position).magnitude / animalType.moveSpeed);
+                    }
+                }
+
+                return;
+            }
+        }
+
+        // Just move somewhere random.
         target = transform.position + Random.onUnitSphere * animalType.sightRange;
     }
 }

@@ -54,7 +54,7 @@ public class GameController : MonoBehaviour
 
 
         // Place some initial animals.
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < 10; i++)
         {
             Vector3 c = Random.onUnitSphere;
             Vector2 coord = new Vector2(c.x, c.y);

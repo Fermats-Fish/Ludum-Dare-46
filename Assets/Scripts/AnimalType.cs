@@ -16,7 +16,7 @@ public class AnimalType
 
     public static void InitAnimalTypes()
     {
-        var bear = new AnimalType("Bear", 300, 0.5f, 6f);
+        var bear = new AnimalType("Bear", 300, 0.5f, 2f);
         var deer = new AnimalType("Deer", 50, 0.7f, 1f);
 
         animalTypes = new List<AnimalType> { bear, deer };
