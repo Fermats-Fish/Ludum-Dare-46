@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3180550774117897722}
   - component: {fileID: 8547666859842321238}
   m_Layer: 0
-  m_Name: tree ghost
+  m_Name: plant ghost
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -69,7 +69,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_Sprite: {fileID: 384058854656272681, guid: ada5640361164e948a380bf535fbe2dd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.45490196}
   m_FlipX: 0

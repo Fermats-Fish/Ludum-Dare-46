@@ -14,9 +14,11 @@ public class Arsonist : Enemy
     }
     protected override void AttackTree()
     {
+        print("FIRE");
         Instantiate(fire, target.transform).GetComponent<Fire>().Spread(target);
-
+        timeSinceAttack = 0;
         attackMode = false;
+        target = null;
 
     }
 
