@@ -13,11 +13,14 @@ public class AnimalType
     public string name;
     public float moveSpeed;
     public float sightRange;
+    public float attackRange;
+    public int attackStrength;
+    public float attackCooldown;
 
     public static void InitAnimalTypes()
     {
-        var bear = new AnimalType("Bear", 300, 0.5f, 2f);
-        var deer = new AnimalType("Deer", 50, 0.7f, 1f);
+        var bear = new AnimalType("Bear", 300, 0.5f, 2f, 0.5f, 10, 1f);
+        var deer = new AnimalType("Deer", 50, 0.7f, 1f, 0f, 0, 1f);
 
         animalTypes = new List<AnimalType> { bear, deer };
 
@@ -27,11 +30,14 @@ public class AnimalType
         deer.runsFrom.Add(bear);
     }
 
-    public AnimalType(string name, int health, float moveSpeed, float sightRange)
+    public AnimalType(string name, int health, float moveSpeed, float sightRange, float attackRange, int attackStrength, float attackCooldown)
     {
         this.name = name;
         this.health = health;
         this.moveSpeed = moveSpeed;
         this.sightRange = sightRange;
+        this.attackRange = attackRange;
+        this.attackStrength = attackStrength;
+        this.attackCooldown = attackCooldown;
     }
 }

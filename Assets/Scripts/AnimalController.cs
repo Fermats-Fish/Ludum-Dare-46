@@ -16,6 +16,10 @@ public class AnimalController : MonoBehaviour
 
     int health;
 
+    AnimalController targetAnimal;
+
+    float attackTimer = 0f;
+
     public void Initialise(AnimalType animalType)
     {
         this.animalType = animalType;
@@ -26,18 +30,42 @@ public class AnimalController : MonoBehaviour
 
     void Update()
     {
-        // Pick new target?
+        if (attackTimer > 0f)
+        {
+            attackTimer -= Time.deltaTime;
+        }
         timer -= Time.deltaTime;
+
+        spriteRenderer.color = Color.Lerp(spriteRenderer.color, Color.white, Time.deltaTime * 5f);
+
+        // Pick new target?
         if (timer <= 0f)
         {
             timer = Random.Range(0f, MAX_TIME_BETWEEN_TARGETS);
             PickNewTarget();
         }
 
+        if (targetAnimal != null && attackTimer <= 0 && (targetAnimal.transform.position - transform.position).sqrMagnitude < animalType.attackRange * animalType.attackRange)
+        {
+            // Can attack.
+            attackTimer = animalType.attackCooldown;
+            targetAnimal.TakeDamage(animalType.attackStrength);
+        }
+
         // Move towards target.
         Vector3 delta = (target - transform.position).normalized * animalType.moveSpeed * Time.deltaTime;
         delta.z = 0;
         transform.position += delta;
+    }
+
+    public void TakeDamage(int amount)
+    {
+        health -= amount;
+        spriteRenderer.color = Color.red;
+        if (health <= 0f)
+        {
+            Destroy(gameObject);
+        }
     }
 
     void PickNewTarget()
@@ -95,6 +123,7 @@ public class AnimalController : MonoBehaviour
         }
 
         // Okay, nothing to run from. Anything to run towards...
+        List<AnimalController> possibleAnimals = new List<AnimalController>();
         if (animalType.eats.Count > 0)
         {
             colliders = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), animalType.sightRange);
@@ -104,21 +133,23 @@ public class AnimalController : MonoBehaviour
                 if (ac != null && animalType.eats.Find(x => x == ac.animalType) != null)
                 {
                     // Run towards this animal.
-                    possibleTargets.Add(ac.transform.position);
+                    possibleAnimals.Add(ac);
                 }
             }
         }
 
-        if (possibleTargets.Count > 0)
+        if (possibleAnimals.Count > 0)
         {
             float closest = Mathf.Infinity;
-            foreach (var possibleTarget in possibleTargets)
+            foreach (var animal in possibleAnimals)
             {
+                var possibleTarget = animal.transform.position;
                 var sqrMag = (possibleTarget - transform.position).sqrMagnitude;
                 if (sqrMag < closest)
                 {
                     closest = sqrMag;
                     target = possibleTarget;
+                    targetAnimal = animal;
 
                     // Make the time before the next target check be at most the time it will take to reach the target's current position.
                     timer = Random.Range(0f, (target - transform.position).magnitude / animalType.moveSpeed);

@@ -72,7 +72,7 @@ public class Tile
             g = 0.8f - (0.5f * moisture);
             b = 0.2f;
         }
-        this.color = new Color(r,g,b);
+        this.color = new Color(r, g, b);
     }
 }
 
@@ -100,8 +100,8 @@ public class MarshSubTile
         this.flipX = flipX;
         this.flipY = flipY;
         this.tile = tile;
-        float locX = tile.location.x - 0.5f + (point.x/100f);
-        float locY = tile.location.y - 0.5f + (point.y/100f);
+        float locX = tile.location.x - 0.5f + (point.x / 100f);
+        float locY = tile.location.y - 0.5f + (point.y / 100f);
         this.location = new Vector3(locX, locY, 0.99f);
     }
 }
@@ -109,7 +109,7 @@ public class MarshSubTile
 public class Point
 {
     public int x;
-    
+
     public int y;
 
     public Point(int x, int y)

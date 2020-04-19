@@ -12,7 +12,7 @@ public class GameController : MonoBehaviour
 
     public List<PlantController> trees = new List<PlantController>();
 
-    const int GRID_SIZE = 200;
+    const int GRID_SIZE = 100;
 
     const float TREE_UPDATE_PERIOD = 5f, DAY_LENGTH = 60f;
 
@@ -54,7 +54,7 @@ public class GameController : MonoBehaviour
                 {
                     foreach (MarshSubTile m in t.marsh)
                     {
-                        var marshGameObject = Instantiate(terrainPrefab, m.location, Quaternion.Euler(new Vector3(0, 0, (int)(m.rotation*360))));
+                        var marshGameObject = Instantiate(terrainPrefab, m.location, Quaternion.Euler(new Vector3(0, 0, (int)(m.rotation * 360))));
                         var sr = marshGameObject.GetComponent<SpriteRenderer>();
                         sr.sprite = m.sprite;
                         sr.flipX = m.flipX;
@@ -64,7 +64,7 @@ public class GameController : MonoBehaviour
                 }
             }
         }
-        
+
         // Init the animal types.
         AnimalType.InitAnimalTypes();
 
