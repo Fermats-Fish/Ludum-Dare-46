@@ -513,6 +513,8 @@ MonoBehaviour:
     type: 3}
   trees: []
   carbon: 0
+  terrainPrefab: {fileID: 4395086990619428230, guid: 002bafd07d92dbe4e9ffb779b4609125,
+    type: 3}
 --- !u!4 &669162829
 Transform:
   m_ObjectHideFlags: 0
