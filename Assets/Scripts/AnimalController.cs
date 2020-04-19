@@ -39,11 +39,32 @@ public class AnimalController : MonoBehaviour
 
     void PickNewTarget()
     {
+        // First check we are near a tree.
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), animalType.sightRange * 3);
+        bool treeNearby = false;
+        foreach (var collider in colliders)
+        {
+            var pc = collider.GetComponent<PlantController>();
+            if (pc != null)
+            {
+                // There is a tree nearby, so we are fine.
+                treeNearby = true;
+                break;
+            }
+        }
+        if (!treeNearby)
+        {
+            // Move towards a random tree.
+            target = GameController.instance.trees[Random.Range(0, GameController.instance.trees.Count)].transform.position;
+            return;
+        }
+
+
         List<Vector3> possibleTargets = new List<Vector3>();
         // Check for anything to run away from...
         if (animalType.runsFrom.Count > 0)
         {
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), animalType.sightRange);
+            colliders = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), animalType.sightRange);
             foreach (var collider in colliders)
             {
                 AnimalController ac = collider.GetComponent<AnimalController>();
@@ -73,7 +94,7 @@ public class AnimalController : MonoBehaviour
         // Okay, nothing to run from. Anything to run towards...
         if (animalType.eats.Count > 0)
         {
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), animalType.sightRange);
+            colliders = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), animalType.sightRange);
             foreach (var collider in colliders)
             {
                 AnimalController ac = collider.GetComponent<AnimalController>();

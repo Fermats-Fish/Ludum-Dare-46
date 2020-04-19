@@ -15,6 +15,8 @@ public class Enemy : MonoBehaviour
     Vector3 position;
     public float health;
 
+    float bearSightRange = 3f;
+
     // Start is called before the first frame update
     public void Init()
     {
@@ -27,6 +29,20 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Check for nearby bear.
+        var colliders = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), bearSightRange);
+        foreach (var collider in colliders)
+        {
+            AnimalController ac = collider.GetComponent<AnimalController>();
+            if (ac != null && ac.animalType == AnimalType.animalTypes.Find(x => x.name == "Bear"))
+            {
+                // Run away from this animal.
+                GoHome();
+                timeSinceAttack += Time.deltaTime;
+                return;
+            }
+        }
+
         if (attackMode)
         {
 

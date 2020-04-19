@@ -11,7 +11,7 @@ public class GameController : MonoBehaviour
     public GameObject animalPrefab;
 
     public List<PlantController> trees = new List<PlantController>();
-   
+
 
     const float TREE_UPDATE_PERIOD = 5f, DAY_LENGTH = 60f;
 
@@ -44,7 +44,7 @@ public class GameController : MonoBehaviour
             Vector3 c = Random.onUnitSphere;
             Vector2 coord = new Vector2(c.x, c.y);
             coord = coord.normalized * Mathf.Sqrt(Random.Range(0f, 1f)) * 10f;
-            PlantController newPlant = CreatePlant(coord, PlantType.plantTypes[Random.Range(0, PlantType.plantTypes.Count)]);
+            PlantController newPlant = CreatePlant(coord, PlantType.GetRandomPlantType());
             newPlant.SetAge(Random.Range(1, newPlant.plantType.matureTime));
         }
 
@@ -102,7 +102,8 @@ public class GameController : MonoBehaviour
             treeTimer -= TREE_UPDATE_PERIOD;
         }
 
-        if (dayTimer > DAY_LENGTH) {
+        if (dayTimer > DAY_LENGTH)
+        {
             dayTimer = 0;
             daysSurvived++;
         }

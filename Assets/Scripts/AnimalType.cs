@@ -9,6 +9,7 @@ public class AnimalType
     public int health;
     public List<AnimalType> runsFrom = new List<AnimalType>();
     public List<AnimalType> eats = new List<AnimalType>();
+    public List<PlantType> attractedToPlants = new List<PlantType>();
     public string name;
     public float moveSpeed;
     public float sightRange;
@@ -21,6 +22,7 @@ public class AnimalType
         animalTypes = new List<AnimalType> { bear, deer };
 
         bear.eats.Add(deer);
+        bear.attractedToPlants.Add(PlantType.plantTypes.Find(x => x.name == "Fruit Tree"));
 
         deer.runsFrom.Add(bear);
     }
