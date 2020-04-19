@@ -18,6 +18,7 @@ public class Fire : MonoBehaviour
         fireSize = 0;
         color = spriteRenderer.color;
         transform.localPosition = Vector3.zero;
+        
 
     }
 
@@ -25,11 +26,13 @@ public class Fire : MonoBehaviour
     void Update()
     {
         if (tree != null) {
+            transform.localScale = Vector3.one * tree.spriteRenderer.sprite.bounds.size.x;
             if (tree.health > 0)
             {
-                spriteRenderer.color = color * (0.9f + Mathf.Cos(Time.time * 10) / 10);
-                transform.localScale = Vector3.one * fireSize;
-                fireSize = (1f - Mathf.Pow(tree.health / tree.maxHealth * 2 - 1, 2)) * tree.spriteRenderer.sprite.bounds.size.x;
+
+                spriteRenderer.color = color * (0.9f + Mathf.Cos(Time.time * 10) / 10)*fireSize;
+                //stransform.localScale = Vector3.one * fireSize;
+                fireSize = (1f - Mathf.Pow(tree.health / tree.maxHealth * 2 - 1, 2));
                 tree.health -= tree.flammability * Time.deltaTime;
 
                 float h = Mathf.Max(tree.health / tree.maxHealth, 0.3f);
