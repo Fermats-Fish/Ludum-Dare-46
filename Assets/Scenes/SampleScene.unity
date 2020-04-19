@@ -572,9 +572,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   plantTypeButtonPrefab: {fileID: 6829638986979640785, guid: 8c90820f2898b524086937cce753e754,
     type: 3}
+  waterToolButtonPrefab: {fileID: 6829638986979640785, guid: a349d03c35d2d354d94326811b3775fe,
+    type: 3}
   carbonText: {fileID: 518559709}
   waterText: {fileID: 764090702}
-  plantSelectPanel: {fileID: 1655407064}
+  toolSelectPanel: {fileID: 1655407064}
+  tools: []
+  selectedTool: {fileID: 0}
   plantGhostPrefab: {fileID: 7318170635542595064, guid: 6c8dccbfc9562174ab4ec3bd8d9eb522,
     type: 3}
 --- !u!1 &669162827
@@ -855,7 +859,7 @@ GameObject:
   - component: {fileID: 1655407066}
   - component: {fileID: 1655407065}
   m_Layer: 5
-  m_Name: Plant Select Panel
+  m_Name: Tool Select Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
