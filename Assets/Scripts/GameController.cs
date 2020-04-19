@@ -9,12 +9,17 @@ public class GameController : MonoBehaviour
     public GameObject treePrefab;
 
     public List<PlantController> trees = new List<PlantController>();
+   
 
-    const float TREE_UPDATE_PERIOD = 5f;
+    const float TREE_UPDATE_PERIOD = 5f, DAY_LENGTH = 60f;
 
-    float treeTimer = 0f;
+
+    float treeTimer = 0f, dayTimer = 0f;
 
     long carbon = 0;
+
+    public float timeOfDay;
+    public int daysSurvived;
 
     void Start()
     {
@@ -58,6 +63,7 @@ public class GameController : MonoBehaviour
     void Update()
     {
         treeTimer += Time.deltaTime;
+        dayTimer += Time.deltaTime;
 
         while (treeTimer > TREE_UPDATE_PERIOD)
         {
@@ -67,6 +73,13 @@ public class GameController : MonoBehaviour
             }
             treeTimer -= TREE_UPDATE_PERIOD;
         }
+
+        if (dayTimer > DAY_LENGTH) {
+            dayTimer = 0;
+            daysSurvived++;
+        }
+
+        timeOfDay = dayTimer / DAY_LENGTH;
     }
 
     public long GetCarbon()

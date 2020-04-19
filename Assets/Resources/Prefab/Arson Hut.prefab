@@ -97,3 +97,5 @@ MonoBehaviour:
   numberOfEnemies: 3
   enemyPrefab: {fileID: 2710513509355314076, guid: f02002c19dc554b418c7ee0f427de795,
     type: 3}
+  HOME_TIME: 0.25
+  ATTACK_TIME: 0.9

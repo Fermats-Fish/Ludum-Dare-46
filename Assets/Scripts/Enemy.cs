@@ -21,7 +21,7 @@ public class Enemy : MonoBehaviour
         timeSinceAttack = attackPeriod;
         health = 100;
         position = transform.position;
-        attackMode = true;
+        attackMode = false;
     }
 
     // Update is called once per frame
