@@ -11,7 +11,7 @@ public class Fire : MonoBehaviour
 
     bool spread;
 
-    float fireSize;
+    public float fireSize;
     // Start is called before the first frame update
     void Start()
     {
@@ -25,21 +25,22 @@ public class Fire : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (tree != null) {
+        if (tree != null)
+        {
             transform.localScale = Vector3.one * tree.spriteRenderer.sprite.bounds.size.x;
             if (tree.health > 0)
             {
 
-                spriteRenderer.color = color * (0.9f + Mathf.Cos(Time.time * 10) / 10)*fireSize;
+                spriteRenderer.color = color * (0.9f + Mathf.Cos(Time.time * 10) / 10) * fireSize;
                 //stransform.localScale = Vector3.one * fireSize;
                 fireSize = (1f - Mathf.Pow(tree.health / tree.maxHealth * 2 - 1, 2));
                 tree.health -= tree.flammability * Time.deltaTime;
 
                 float h = Mathf.Max(tree.health / tree.maxHealth, 0.3f);
-                tree.spriteRenderer.color = new Color(h*treeColor.r, h * treeColor.g, h * treeColor.b, 1);
+                tree.spriteRenderer.color = new Color(h * treeColor.r, h * treeColor.g, h * treeColor.b, 1);
                 if (!spread)
                 {
-                    if (tree.health > 40 && tree.health < 60)
+                    if (tree.health < 80 && !spread)
                     {
                         List<PlantController> trees = GameController.instance.trees;
 
@@ -59,13 +60,18 @@ public class Fire : MonoBehaviour
                     }
                 }
             }
+            
         }
+        
+           
+        
     }
 
     public void Spread(PlantController plant) {
         Fire f = Instantiate(gameObject, plant.transform).GetComponent<Fire>();
         f.tree = plant;
         f.fireSize = 0;
+        f.transform.localScale = Vector3.zero;
         plant.onFire = true;
         f.treeColor = plant.spriteRenderer.color; 
     }

@@ -14,7 +14,7 @@ public class GameController : MonoBehaviour
 
     const int GRID_SIZE = 200;
 
-    const float TREE_UPDATE_PERIOD = 5f, DAY_LENGTH = 60f;
+    const float TREE_UPDATE_PERIOD = 5f, DAY_LENGTH = 180f;
 
     float treeTimer = 0f, dayTimer = 0f;
 
