@@ -734,6 +734,7 @@ MonoBehaviour:
   plantGhostPrefab: {fileID: 7318170635542595064, guid: 6c8dccbfc9562174ab4ec3bd8d9eb522,
     type: 3}
   timeSlider: {fileID: 1165741471}
+  timeScaleText: {fileID: 106368335}
 --- !u!1 &669162827
 GameObject:
   m_ObjectHideFlags: 0
