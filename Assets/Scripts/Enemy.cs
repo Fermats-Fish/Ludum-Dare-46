@@ -61,11 +61,7 @@ public class Enemy : MonoBehaviour
             }
             else
             {
-
                 LookForTree();
-  
-                
-
             }
         }
         else
@@ -75,6 +71,11 @@ public class Enemy : MonoBehaviour
         }
         timeSinceAttack += Time.deltaTime;
 
+        // if (target != null)
+        // {
+        //     var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
+        //     transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        // }
     }
 
     float TreeClosest(PlantController tree)
@@ -82,8 +83,6 @@ public class Enemy : MonoBehaviour
         float closestLocal = Vector3.SqrMagnitude(tree.transform.position - transform.position) + Vector3.SqrMagnitude(tree.transform.position - home.position);
         return closestLocal;
     }
-
-
 
     protected virtual void LookForTree()
     {
@@ -115,6 +114,7 @@ public class Enemy : MonoBehaviour
         target.beingChoppedDown = true;
 
     }
+
     protected virtual void AttackTree()
     {
 
@@ -141,8 +141,13 @@ public class Enemy : MonoBehaviour
 
         transform.position += speed * direction.normalized * Time.deltaTime;
     }
+
     void GoHome()
     {
+        // direction = (home.position - transform.position).normalized;
+
+        // transform.position += speed * direction * Time.deltaTime;
+
         direction = (home.position - transform.position);
         
         if (direction.sqrMagnitude > 0.1f) {
