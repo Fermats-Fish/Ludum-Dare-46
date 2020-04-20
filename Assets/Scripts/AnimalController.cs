@@ -53,13 +53,32 @@ public class AnimalController : MonoBehaviour
         }
 
         // Move towards target.
-        Vector3 delta = (target - transform.position).normalized * animalType.moveSpeed * Time.deltaTime;
-        delta.z = 0;
-        transform.position += delta;
+        // Vector3 delta = (target - transform.position).normalized * animalType.moveSpeed * Time.deltaTime;
+        // delta.z = 0;
+        // transform.position += delta;
         
-        var direction = target - transform.position;
-        var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
-        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        // var direction = target - transform.position;
+        // var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
+        // transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        if (target != null)
+        {
+            Vector3 delta = (target - transform.position).normalized * animalType.moveSpeed * Time.deltaTime;
+            delta.z = 0;
+            transform.position += delta;
+
+            Vector3 direction = (target - transform.position);
+            if (direction.sqrMagnitude > 0.1f)
+            {
+                faceMovement(direction.normalized);
+            }
+        }
+    }
+
+    void faceMovement(Vector3 d)
+    {
+        float bearing = Mathf.Atan2(d.y, d.x) * Mathf.Rad2Deg-90;
+        Vector3 e = transform.eulerAngles;
+        transform.eulerAngles = new Vector3(e.x, e.y, bearing);
     }
 
     public void TakeDamage(int amount)

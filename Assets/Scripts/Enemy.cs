@@ -67,14 +67,15 @@ public class Enemy : MonoBehaviour
         else
         {
             GoHome();
+            transform.up = Vector3.Normalize(home.position - transform.position);
         }
         timeSinceAttack += Time.deltaTime;
 
-        if (target != null)
-        {
-            var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
-            transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-        }
+        // if (target != null)
+        // {
+        //     var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
+        //     transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        // }
     }
 
     float TreeClosest(PlantController tree)
@@ -130,16 +131,36 @@ public class Enemy : MonoBehaviour
 
     void GoToTree()
     {
-        direction = (target.transform.position - transform.position).normalized;
+        direction = (target.transform.position - transform.position);
        
-        transform.position += speed * direction * Time.deltaTime;
+        
+        if (direction.sqrMagnitude > 0.1f)
+        {
+            faceMovement(direction);
+        }
+
+        transform.position += speed * direction.normalized * Time.deltaTime;
     }
 
     void GoHome()
     {
-        direction = (home.position - transform.position).normalized;
+        // direction = (home.position - transform.position).normalized;
 
-        transform.position += speed * direction * Time.deltaTime;
+        // transform.position += speed * direction * Time.deltaTime;
+
+        direction = (home.position - transform.position);
+        
+        if (direction.sqrMagnitude > 0.1f) {
+            faceMovement(direction);
+        }
+
+        transform.position += speed * direction.normalized * Time.deltaTime;
+    }
+
+    void faceMovement(Vector3 d) {
+        float bearing = Mathf.Atan2(d.y, d.x)*Mathf.Rad2Deg-90;
+        Vector3 e = transform.eulerAngles;
+        transform.eulerAngles = new Vector3(e.x, e.y, bearing);
     }
 
     public void Attacked(float attack)

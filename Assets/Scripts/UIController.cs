@@ -16,6 +16,8 @@ public class UIController : MonoBehaviour
 
     public Text waterText;
 
+    public Text daysSurvivedText;
+
     public Transform toolSelectPanel;
 
     public List<Tool> tools;
@@ -26,6 +28,9 @@ public class UIController : MonoBehaviour
     GameObject plantGhost;
 
     public GameObject plantGhostPrefab;
+
+    public Slider timeSlider;
+    public Text timeScaleText;
 
     const float GHOST_Z = -2;
 
@@ -133,6 +138,8 @@ public class UIController : MonoBehaviour
                 DeselectTool();
             }
         }
+        Time.timeScale = (int)(timeSlider.value*9 + 1);
+        timeScaleText.text = "Time x" + Time.timeScale;
     }
 
     public static bool MouseOverUI()
@@ -147,6 +154,12 @@ public class UIController : MonoBehaviour
         {
             tool.UpdateInteractable();
         }
+    }
+
+    public void OnDaysSurvived()
+    {
+        daysSurvivedText.text = "Days: " + (GameController.instance.daysSurvived+GameController.instance.timeOfDay).ToString("0.00");
+      
     }
 
     public void OnWaterChanged()
