@@ -12,6 +12,8 @@ public class GameController : MonoBehaviour
 
     public List<PlantController> trees = new List<PlantController>();
 
+    public List<Fire> fires = new List<Fire>();
+
     const int GRID_SIZE = 100;
 
     const float TREE_UPDATE_PERIOD = 5f, DAY_LENGTH = 180f;
@@ -83,7 +85,7 @@ public class GameController : MonoBehaviour
 
 
         // Place some initial animals.
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 3; i++)
         {
             Vector3 c = Random.onUnitSphere;
             Vector2 coord = new Vector2(c.x, c.y);
