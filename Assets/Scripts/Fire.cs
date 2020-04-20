@@ -8,7 +8,7 @@ public class Fire : MonoBehaviour
     public SpriteRenderer spriteRenderer;
     Color color,treeColor;
     public PlantController tree;
-
+    public float fireHealth = 1;
     bool spread;
 
     public float fireSize;
@@ -31,9 +31,9 @@ public class Fire : MonoBehaviour
             if (tree.health > 0)
             {
 
-                spriteRenderer.color = color * (0.9f + Mathf.Cos(Time.time * 10) / 10) * fireSize;
+                spriteRenderer.color = color * (0.9f + Mathf.Cos(Time.time * 10) / 10) * fireSize*fireHealth;
                 //stransform.localScale = Vector3.one * fireSize;
-                fireSize = (1f - Mathf.Pow(tree.health / tree.maxHealth * 2 - 1, 2));
+                fireSize = (1f - Mathf.Pow(tree.health / tree.maxHealth * 2 - 1, 2))* tree.spriteRenderer.sprite.bounds.size.x;
                 tree.health -= tree.flammability * Time.deltaTime;
 
                 float h = Mathf.Max(tree.health / tree.maxHealth, 0.3f);
@@ -62,8 +62,10 @@ public class Fire : MonoBehaviour
             }
             
         }
-        
-           
+
+        if (fireHealth < 0 || (spread && fireSize < 0.1f)) {
+            Destroy(gameObject, 1f);
+        }
         
     }
 
