@@ -138,8 +138,8 @@ public class UIController : MonoBehaviour
                 DeselectTool();
             }
         }
-        Time.timeScale = (int)(timeSlider.value*10 + 1);
-        timeScaleText.text = "Time Scale " + Time.timeScale;
+        Time.timeScale = (int)(timeSlider.value*9 + 1);
+        timeScaleText.text = "Time x" + Time.timeScale;
     }
 
     public static bool MouseOverUI()
