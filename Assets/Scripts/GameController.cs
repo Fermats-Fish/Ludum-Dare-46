@@ -11,6 +11,7 @@ public class GameController : MonoBehaviour
     public GameObject animalPrefab;
 
     public List<PlantController> trees = new List<PlantController>();
+    public List<AnimalController> animals = new List<AnimalController>();
 
     public List<Fire> fires = new List<Fire>();
 
@@ -33,6 +34,10 @@ public class GameController : MonoBehaviour
     public GameObject terrainPrefab;
 
     AnimalController hunter;
+
+    float animalAdjustmentTimer = 0f;
+    float MIN_TIME_FOR_ANIMAL_ADJUST = 15f;
+    float MAX_TIME_FOR_ANIMAL_ADJUST = 60f;
 
     void Start()
     {
@@ -92,17 +97,18 @@ public class GameController : MonoBehaviour
         var bear = AnimalType.animalTypes.Find(x => x.name == "Bear");
 
 
-
-        for (int i = 0; i < 15; i++)
-
+        // Place some initial animals.
+        for (int i = 0; i < deer.GetHabitability(trees, animals); i++)
         {
             SpawnAnimal(deer);
         }
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < bear.GetHabitability(trees, animals); i++)
         {
             SpawnAnimal(bear);
         }
+        Debug.Log(deer.GetHabitability(trees, animals));
+        Debug.Log(bear.GetHabitability(trees, animals));
 
 
         UIController.instance.OnCarbonChanged();
@@ -130,6 +136,11 @@ public class GameController : MonoBehaviour
     void CalculateDaysTillNextHunter()
     {
         daysTillNextHunter = Random.Range(MIN_DAYS_TILL_NEXT_HUNTER, MAX_DAYS_TILL_NEXT_HUNTER + 1);
+    }
+
+    void ResetAnimalAdjustTimer()
+    {
+        animalAdjustmentTimer = Random.Range(MIN_TIME_FOR_ANIMAL_ADJUST, MAX_TIME_FOR_ANIMAL_ADJUST);
     }
 
     public PlantController CreatePlant(Vector2 position, PlantType selectedPlantType)
@@ -179,6 +190,22 @@ public class GameController : MonoBehaviour
                 // Add hunter.
                 hunter = SpawnAnimal(AnimalType.animalTypes.Find(x => x.name == "Hunter"), 20f, 30f);
                 Debug.Log("A hunter arrives!");
+            }
+        }
+
+        animalAdjustmentTimer -= Time.deltaTime;
+        if( animalAdjustmentTimer < 0f ){
+            ResetAnimalAdjustTimer();
+            foreach (var animalType in AnimalType.animalTypes){
+                var animalsOfThisType = animals.FindAll(x => x.animalType == animalType);
+                float diff = animalType.GetHabitability(trees, animals) - animalsOfThisType.Count;
+                if (diff > 0 && Random.Range(0f, 3f) < diff){
+                    SpawnAnimal(animalType, 20f, 30f);
+                }
+                else if (diff < 0 && Random.Range(0f, 3f) < -diff && animalsOfThisType.Count > 0){
+                    AnimalController a = animalsOfThisType[Random.Range(0, animalsOfThisType.Count)];
+                    a.TakeDamage(a.GetHealth() * 100);
+                }
             }
         }
 
