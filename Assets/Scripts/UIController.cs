@@ -35,7 +35,8 @@ public class UIController : MonoBehaviour
     const float GHOST_Z = -2;
 
 
-    public SpriteRenderer cloud;
+   
+   
 
     void Start()
     {
@@ -141,7 +142,7 @@ public class UIController : MonoBehaviour
                 DeselectTool();
             }
         }
-        Time.timeScale = (int)(timeSlider.value*9 + 1);
+        Time.timeScale = (int)(timeSlider.value*29 + 1);
         timeScaleText.text = "Time x" + Time.timeScale;
     }
 
