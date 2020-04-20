@@ -26,7 +26,7 @@ public class PlantButton : Tool
         }
 
         // If not holding control, deselct the plant type...
-        return !Input.GetKey(KeyCode.LeftControl);
+        return !(Input.GetKey(KeyCode.LeftControl) | Input.GetKey(KeyCode.LeftShift));
     }
 
     public override void UpdateInteractable()

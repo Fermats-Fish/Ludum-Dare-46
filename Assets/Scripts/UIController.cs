@@ -148,7 +148,7 @@ public class UIController : MonoBehaviour
             }
 
             // Right click or esc to cancel.
-            if (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.Escape))
+            if ((Input.GetMouseButtonDown(1) && !(Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.LeftShift))) || Input.GetKeyDown(KeyCode.Escape))
             {
                 DeselectTool();
             }
