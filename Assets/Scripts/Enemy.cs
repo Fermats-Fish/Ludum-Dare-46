@@ -131,21 +131,25 @@ public class Enemy : MonoBehaviour
 
     void GoToTree()
     {
-        direction = (target.transform.position - transform.position).normalized;
+        direction = (target.transform.position - transform.position);
        
-        transform.position += speed * direction * Time.deltaTime;
+        
         if (direction.sqrMagnitude > 0.1f)
         {
             faceMovement(direction);
         }
+
+        transform.position += speed * direction.normalized * Time.deltaTime;
     }
     void GoHome()
     {
-        direction = (home.position - transform.position).normalized;
-        transform.position += speed * direction * Time.deltaTime;
+        direction = (home.position - transform.position);
+        
         if (direction.sqrMagnitude > 0.1f) {
             faceMovement(direction);
         }
+
+        transform.position += speed * direction.normalized * Time.deltaTime;
     }
 
     void faceMovement(Vector3 d) {

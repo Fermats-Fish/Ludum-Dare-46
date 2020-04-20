@@ -57,10 +57,10 @@ public class AnimalController : MonoBehaviour
         delta.z = 0;
         transform.position += delta;
 
-        Vector3 direction = (target - transform.position).normalized;
+        Vector3 direction = (target - transform.position);
         if (direction.sqrMagnitude > 0.1f)
         {
-            faceMovement(direction);
+            faceMovement(direction.normalized);
         }
     }
 
