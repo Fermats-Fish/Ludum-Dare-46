@@ -11,7 +11,8 @@ public class SpawnEnemy : MonoBehaviour
     public List<Enemy> enemies = new List<Enemy>();
     public float HOME_TIME = 0.75f, ATTACK_TIME = 0.25f;
 
-    public int upgradeDay = 2, bossDay= 5;
+    public int upgradeDay = 3, bossDay= 10;
+   
 
     int currentDay = 0;
    public  int daysSinceBoss;
