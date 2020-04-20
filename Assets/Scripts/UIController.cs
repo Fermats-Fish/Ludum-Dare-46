@@ -29,6 +29,9 @@ public class UIController : MonoBehaviour
 
     public GameObject plantGhostPrefab;
 
+    public Slider timeSlider;
+    public Text timeScaleText;
+
     const float GHOST_Z = -2;
 
     void Start()
@@ -135,6 +138,8 @@ public class UIController : MonoBehaviour
                 DeselectTool();
             }
         }
+        Time.timeScale = (int)(timeSlider.value*10 + 1);
+        timeScaleText.text = "Time Scale " + Time.timeScale;
     }
 
     public static bool MouseOverUI()
