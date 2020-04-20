@@ -37,7 +37,7 @@ public class GameController : MonoBehaviour
 
     float animalAdjustmentTimer = 0f;
     float MIN_TIME_FOR_ANIMAL_ADJUST = 15f;
-    float MAX_TIME_FOR_ANIMAL_ADJUST = 60f;
+    float MAX_TIME_FOR_ANIMAL_ADJUST = 90f;
 
     void Start()
     {
@@ -93,27 +93,17 @@ public class GameController : MonoBehaviour
             newPlant.SetAge(Random.Range(1, newPlant.plantType.matureTime));
         }
 
-        var deer = AnimalType.animalTypes.Find(x => x.name == "Deer");
-        var bear = AnimalType.animalTypes.Find(x => x.name == "Bear");
-
-
         // Place some initial animals.
-        for (int i = 0; i < deer.GetHabitability(trees, animals); i++)
+        foreach (var animalType in AnimalType.animalTypes)
         {
-            SpawnAnimal(deer);
+            for (int i = 0; i < animalType.GetHabitability(trees, animals); i++)
+            {
+                SpawnAnimal(animalType);
+            }
         }
-
-        for (int i = 0; i < bear.GetHabitability(trees, animals); i++)
-        {
-            SpawnAnimal(bear);
-        }
-        Debug.Log(deer.GetHabitability(trees, animals));
-        Debug.Log(bear.GetHabitability(trees, animals));
-
 
         UIController.instance.OnCarbonChanged();
         UIController.instance.OnWaterChanged();
-
 
     }
 

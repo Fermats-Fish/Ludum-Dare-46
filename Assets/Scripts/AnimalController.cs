@@ -20,6 +20,10 @@ public class AnimalController : MonoBehaviour
 
     float attackTimer = 0f;
 
+    public float hunger;
+
+    const float HUNGER_LOSS_PER_SECOND = 0.02f;
+
     public void Initialise(AnimalType animalType)
     {
         this.animalType = animalType;
@@ -27,6 +31,7 @@ public class AnimalController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sprite = Resources.Load<Sprite>("Sprites/animals/" + animalType.name);
         GameController.instance.animals.Add(this);
+        hunger = animalType.maxHunger;
     }
 
     void Update()
@@ -36,6 +41,8 @@ public class AnimalController : MonoBehaviour
             attackTimer -= Time.deltaTime;
         }
         timer -= Time.deltaTime;
+
+        hunger -= Time.deltaTime * HUNGER_LOSS_PER_SECOND;
 
         // Lerp colour back to normal (for when hit).
         spriteRenderer.color = Color.Lerp(spriteRenderer.color, Color.white, Time.deltaTime * 5f);
@@ -47,12 +54,16 @@ public class AnimalController : MonoBehaviour
             PickNewTarget();
         }
 
+        // Can attack when in range, long enough since last attack, and either hungry or always attacks this target.
         bool targetInRange = targetAnimal != null && (targetAnimal.transform.position - transform.position).sqrMagnitude < animalType.attackRange * animalType.attackRange;
-        if (targetInRange && attackTimer <= 0)
+        if (targetInRange && attackTimer <= 0 && (Hungry() || animalType.alwaysAttacks.Find(x => x == targetAnimal.animalType) != null))
         {
             // Can attack.
             attackTimer = animalType.attackCooldown;
             targetAnimal.TakeDamage(animalType.attackStrength);
+            if (targetAnimal.GetHealth() <= 0){
+                hunger += targetAnimal.animalType.foodValue;
+            }
 
             // If run after hit.
             if (animalType.runAfterHitDistance > 0f)
@@ -119,6 +130,10 @@ public class AnimalController : MonoBehaviour
     public int GetHealth()
     {
         return health;
+    }
+
+    public bool Hungry(){
+        return hunger < animalType.maxHunger / 2;
     }
 
     void PickNewTarget()
@@ -241,13 +256,14 @@ public class AnimalController : MonoBehaviour
     bool FindAnimalTarget(float range)
     {
         List<AnimalController> possibleAnimals = new List<AnimalController>();
-        if (animalType.eats.Count > 0)
+        if (animalType.eats.Count + animalType.alwaysAttacks.Count > 0)
         {
             var colliders = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), range);
             foreach (var collider in colliders)
             {
                 AnimalController ac = collider.GetComponent<AnimalController>();
-                if (ac != null && animalType.eats.Find(x => x == ac.animalType) != null)
+                // If animal AND (hungry and we eat this OR always attack this).
+                if (ac != null && (animalType.alwaysAttacks.Find(x => x == ac.animalType) != null || (Hungry() && animalType.eats.Find(x => x == ac.animalType) != null)))
                 {
                     // Run towards this animal.
                     possibleAnimals.Add(ac);
