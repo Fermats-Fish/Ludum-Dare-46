@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
+    const int MAX_SPEED = 10;
 
     public static UIController instance;
 
@@ -152,7 +153,7 @@ public class UIController : MonoBehaviour
                 DeselectTool();
             }
         }
-        Time.timeScale = (int)(timeSlider.value*29 + 1);
+        Time.timeScale = (int)(timeSlider.value*(MAX_SPEED-1) + 1);
         timeScaleText.text = "Time x" + Time.timeScale;
     }
 
