@@ -181,6 +181,10 @@ public class GameController : MonoBehaviour
                 hunter = SpawnAnimal(AnimalType.animalTypes.Find(x => x.name == "Hunter"), 20f, 30f);
                 Debug.Log("A hunter arrives!");
             }
+
+            for(int i = 0; i < trees.Count;i++) {
+                trees[i].beingChoppedDown = false;
+            }
         }
 
         animalAdjustmentTimer -= Time.deltaTime;
