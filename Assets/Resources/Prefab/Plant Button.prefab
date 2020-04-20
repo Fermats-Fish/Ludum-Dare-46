@@ -142,6 +142,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 105df712c35098543b2e85413c5a342e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  button: {fileID: 0}
+  placeTreeAudioClip: {fileID: 8300000, guid: f5563e52d3a39064b8a66740417c4778, type: 3}
 --- !u!1 &6829638987215104670
 GameObject:
   m_ObjectHideFlags: 0

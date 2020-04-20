@@ -8,6 +8,8 @@ public class WaterTool : Tool
     const int WATER_COST = 1000;
     public GameObject cloud;
 
+    public AudioClip clip;
+
     private void Start()
     {
         cloud = Instantiate(GameController.instance.cloudPrefab);
@@ -19,6 +21,9 @@ public class WaterTool : Tool
         {
             // PLACE CODE FOR WATER HERE. THIS WILL FIRST WHEN THE USER LEFT CLICKS, NOT ON MOUSE HOLD.
             Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            
+            // TODO: CHANGE THE CLIP SO IT ISN'S SO LONG THEN UNCOMMENT
+            //AudioSource.PlayClipAtPoint(clip, pos);
             pos.z = 0;
             cloud.GetComponent<SpriteRenderer>().color = Color.white;
              List <Fire> fires = GameController.instance.fires;

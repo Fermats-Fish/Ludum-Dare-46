@@ -56,6 +56,9 @@ public class PlantController : MonoBehaviour
         StartCoroutine("Shake");
         if (health < 0)
         {
+            // Yes this will only play the very start of the clip, but the whole thing is too much anyway for how often this happens and I'm too tired to impliment now.
+            // (It only plays start because it immediately dies. Would have to use AudioSource.PlayAtPoint or whatever it is, and then find a way to lower the volume on that.)
+            GetComponentInChildren<AudioSource>().Play();
             OnDeath();
         }
     }
@@ -82,6 +85,7 @@ public class PlantController : MonoBehaviour
 
     public void OnDeath()
     {
+
         GameController.instance.trees.Remove(this);
         if (onFire)
         {

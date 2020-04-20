@@ -24,6 +24,10 @@ public class AnimalController : MonoBehaviour
 
     const float HUNGER_LOSS_PER_SECOND = 0.02f;
 
+    const float AUDIO_CHANCE_ON_TARGET_CHANGE = 0.007f;
+
+    AudioSource audioSource;
+
     public void Initialise(AnimalType animalType)
     {
         this.animalType = animalType;
@@ -32,6 +36,13 @@ public class AnimalController : MonoBehaviour
         spriteRenderer.sprite = Resources.Load<Sprite>("Sprites/animals/" + animalType.name);
         GameController.instance.animals.Add(this);
         hunger = animalType.maxHunger;
+
+        AudioClip clip = Resources.Load<AudioClip>("Sounds/animals/" + animalType.name);
+        if (clip != null)
+        {
+            audioSource = GetComponentInChildren<AudioSource>();
+            audioSource.clip = clip;
+        }
     }
 
     void Update()
@@ -138,6 +149,11 @@ public class AnimalController : MonoBehaviour
 
     void PickNewTarget()
     {
+        if (audioSource != null && Random.Range(0f, 1f) <= AUDIO_CHANCE_ON_TARGET_CHANGE){
+            audioSource.Play();
+            Debug.Log("Sound");
+        }
+
         // First check we are near a tree.
         Collider2D[] colliders = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), animalType.sightRange * 3);
         bool treeNearby = false;

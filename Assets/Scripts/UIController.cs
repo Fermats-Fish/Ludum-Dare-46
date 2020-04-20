@@ -37,6 +37,8 @@ public class UIController : MonoBehaviour
 
     public SpriteRenderer cloud;
 
+    public static bool muted = true;
+
     void Start()
     {
         // Establish instance.
@@ -59,6 +61,14 @@ public class UIController : MonoBehaviour
         // Add the water button.
         Instantiate(waterToolButtonPrefab, toolSelectPanel).GetComponent<WaterTool>().Initialise();
 
+    }
+
+    public void UpdateAudioOn(bool audioOn){
+        if (audioOn){
+            AudioListener.volume = 1f;
+        } else {
+            AudioListener.volume = 0f;
+        }
     }
 
     public void SetupPlantGhost(PlantType plantType)

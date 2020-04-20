@@ -143,6 +143,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   button: {fileID: 0}
+  cloud: {fileID: 0}
+  clip: {fileID: 8300000, guid: d975d04f415a72943b6526656220c874, type: 3}
 --- !u!1 &6829638987215104670
 GameObject:
   m_ObjectHideFlags: 0
