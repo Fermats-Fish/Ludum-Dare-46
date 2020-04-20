@@ -18,6 +18,10 @@ public class GameController : MonoBehaviour
 
     float treeTimer = 0f, dayTimer = 0f;
 
+    int daysTillNextHunter = 0;
+    const int MIN_DAYS_TILL_NEXT_HUNTER = 2;
+    const int MAX_DAYS_TILL_NEXT_HUNTER = 2;
+
     long carbon = 0;
     long water = 0;
 
@@ -25,6 +29,8 @@ public class GameController : MonoBehaviour
     public int daysSurvived;
 
     public GameObject terrainPrefab;
+
+    AnimalController hunter;
 
     void Start()
     {
@@ -37,6 +43,8 @@ public class GameController : MonoBehaviour
         {
             instance = this;
         }
+
+        CalculateDaysTillNextHunter();
 
         // Generate terrain
         TileController tc = new TileController(GRID_SIZE);
@@ -83,29 +91,42 @@ public class GameController : MonoBehaviour
 
 
         // Place some initial animals.
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 15; i++)
         {
-            Vector3 c = Random.onUnitSphere;
-            Vector2 coord = new Vector2(c.x, c.y);
-            coord = coord.normalized * Mathf.Sqrt(Random.Range(0f, 1f)) * 10f;
-            GameObject animalGO = Instantiate(animalPrefab, coord, Quaternion.identity);
-            animalGO.GetComponent<AnimalController>().Initialise(deer);
+            SpawnAnimal(deer);
         }
 
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 3; i++)
         {
-            Vector3 c = Random.onUnitSphere;
-            Vector2 coord = new Vector2(c.x, c.y);
-            coord = coord.normalized * Mathf.Sqrt(Random.Range(0f, 1f)) * 10f;
-            GameObject animalGO = Instantiate(animalPrefab, coord, Quaternion.identity);
-            animalGO.GetComponent<AnimalController>().Initialise(bear);
+            SpawnAnimal(bear);
         }
 
 
         UIController.instance.OnCarbonChanged();
         UIController.instance.OnWaterChanged();
-       
 
+
+    }
+
+    AnimalController SpawnAnimal(AnimalType animalType)
+    {
+        return SpawnAnimal(animalType, 0f, 10f);
+    }
+
+    AnimalController SpawnAnimal(AnimalType animalType, float minDistance, float maxDistance)
+    {
+        Vector3 c = Random.onUnitSphere;
+        Vector2 coord = new Vector2(c.x, c.y);
+        coord = coord.normalized * (minDistance + Mathf.Sqrt(Random.Range(0f, 1f)) * (maxDistance - minDistance));
+        GameObject animalGO = Instantiate(animalPrefab, coord, Quaternion.identity);
+        var ac = animalGO.GetComponent<AnimalController>();
+        ac.Initialise(animalType);
+        return ac;
+    }
+
+    void CalculateDaysTillNextHunter()
+    {
+        daysTillNextHunter = Random.Range(MIN_DAYS_TILL_NEXT_HUNTER, MAX_DAYS_TILL_NEXT_HUNTER + 1);
     }
 
     public PlantController CreatePlant(Vector2 position, PlantType selectedPlantType)
@@ -136,8 +157,26 @@ public class GameController : MonoBehaviour
 
         if (dayTimer > DAY_LENGTH)
         {
+            if (daysTillNextHunter == 0)
+            {
+                // Remove last hunter.
+                if (hunter != null)
+                {
+                    hunter.TakeDamage(100 * hunter.GetHealth());
+                }
+                CalculateDaysTillNextHunter();
+            }
+
             dayTimer = 0;
             daysSurvived++;
+
+            daysTillNextHunter -= 1;
+            if (daysTillNextHunter == 0)
+            {
+                // Add hunter.
+                hunter = SpawnAnimal(AnimalType.animalTypes.Find(x => x.name == "Hunter"), 20f, 30f);
+                Debug.Log("A hunter arrives!");
+            }
         }
 
         timeOfDay = dayTimer / DAY_LENGTH;

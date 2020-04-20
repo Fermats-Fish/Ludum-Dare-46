@@ -36,6 +36,7 @@ public class AnimalController : MonoBehaviour
         }
         timer -= Time.deltaTime;
 
+        // Lerp colour back to normal (for when hit).
         spriteRenderer.color = Color.Lerp(spriteRenderer.color, Color.white, Time.deltaTime * 5f);
 
         // Pick new target?
@@ -45,38 +46,60 @@ public class AnimalController : MonoBehaviour
             PickNewTarget();
         }
 
-        if (targetAnimal != null && attackTimer <= 0 && (targetAnimal.transform.position - transform.position).sqrMagnitude < animalType.attackRange * animalType.attackRange)
+        bool targetInRange = targetAnimal != null && (targetAnimal.transform.position - transform.position).sqrMagnitude < animalType.attackRange * animalType.attackRange;
+        if (targetInRange && attackTimer <= 0)
         {
             // Can attack.
             attackTimer = animalType.attackCooldown;
             targetAnimal.TakeDamage(animalType.attackStrength);
+
+            // If run after hit.
+            if (animalType.runAfterHitDistance > 0f)
+            {
+                var randomDir = Random.onUnitSphere;
+                randomDir.z = 0;
+                randomDir = randomDir.normalized;
+                target = transform.position + randomDir * animalType.runAfterHitDistance;
+                timer = animalType.runAfterHitDistance / (animalType.moveSpeed * health / animalType.health);
+            }
         }
 
-        // Move towards target.
-        // Vector3 delta = (target - transform.position).normalized * animalType.moveSpeed * Time.deltaTime;
-        // delta.z = 0;
-        // transform.position += delta;
-        
-        // var direction = target - transform.position;
-        // var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
-        // transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-        if (target != null)
-        {
-            Vector3 delta = (target - transform.position).normalized * animalType.moveSpeed * Time.deltaTime;
-            delta.z = 0;
-            transform.position += delta;
 
-            Vector3 direction = (target - transform.position);
-            if (direction.sqrMagnitude > 0.1f)
+        bool targetDefsInRange = targetInRange
+                                && targetAnimal != null
+                                && (targetAnimal.transform.position - transform.position).sqrMagnitude < (animalType.attackRange * animalType.attackRange / 4f);
+
+
+        // Don't move if target is halfway to move distance.
+        if (!targetDefsInRange)
+        {
+
+            // Move towards target.
+            // Vector3 delta = (target - transform.position).normalized * animalType.moveSpeed * Time.deltaTime;
+            // delta.z = 0;
+            // transform.position += delta;
+
+            // var direction = target - transform.position;
+            // var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
+            // transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            if (target != null)
             {
-                faceMovement(direction.normalized);
+                Vector3 delta = (target - transform.position).normalized * animalType.moveSpeed * Time.deltaTime * ((float)health) / animalType.health;
+                delta.z = 0;
+                transform.position += delta;
+
+                Vector3 direction = (target - transform.position);
+                if (direction.sqrMagnitude > 0.1f)
+                {
+                    faceMovement(direction.normalized);
+                }
             }
         }
     }
 
     void faceMovement(Vector3 d)
     {
-        float bearing = Mathf.Atan2(d.y, d.x) * Mathf.Rad2Deg-90;
+        float bearing = Mathf.Atan2(d.y, d.x) * Mathf.Rad2Deg - 90;
         Vector3 e = transform.eulerAngles;
         transform.eulerAngles = new Vector3(e.x, e.y, bearing);
     }
@@ -89,6 +112,11 @@ public class AnimalController : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    public int GetHealth()
+    {
+        return health;
     }
 
     void PickNewTarget()
@@ -110,6 +138,12 @@ public class AnimalController : MonoBehaviour
         {
             // Move towards a random tree.
             target = GameController.instance.trees[Random.Range(0, GameController.instance.trees.Count)].transform.position;
+            return;
+        }
+
+        // Anything to attack...
+        if (FindAnimalTarget(animalType.attackRange))
+        {
             return;
         }
 
@@ -146,38 +180,8 @@ public class AnimalController : MonoBehaviour
         }
 
         // Okay, nothing to run from. Anything to run towards...
-        List<AnimalController> possibleAnimals = new List<AnimalController>();
-        if (animalType.eats.Count > 0)
+        if (FindAnimalTarget(animalType.sightRange))
         {
-            colliders = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), animalType.sightRange);
-            foreach (var collider in colliders)
-            {
-                AnimalController ac = collider.GetComponent<AnimalController>();
-                if (ac != null && animalType.eats.Find(x => x == ac.animalType) != null)
-                {
-                    // Run towards this animal.
-                    possibleAnimals.Add(ac);
-                }
-            }
-        }
-
-        if (possibleAnimals.Count > 0)
-        {
-            float closest = Mathf.Infinity;
-            foreach (var animal in possibleAnimals)
-            {
-                var possibleTarget = animal.transform.position;
-                var sqrMag = (possibleTarget - transform.position).sqrMagnitude;
-                if (sqrMag < closest)
-                {
-                    closest = sqrMag;
-                    target = possibleTarget;
-                    targetAnimal = animal;
-
-                    // Make the time before the next target check be at most the time it will take to reach the target's current position.
-                    timer = Random.Range(0f, (target - transform.position).magnitude / animalType.moveSpeed);
-                }
-            }
             return;
         }
 
@@ -230,5 +234,45 @@ public class AnimalController : MonoBehaviour
 
         // Just move somewhere random.
         target = transform.position + Random.onUnitSphere * animalType.sightRange;
+    }
+
+    bool FindAnimalTarget(float range)
+    {
+        List<AnimalController> possibleAnimals = new List<AnimalController>();
+        if (animalType.eats.Count > 0)
+        {
+            var colliders = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), range);
+            foreach (var collider in colliders)
+            {
+                AnimalController ac = collider.GetComponent<AnimalController>();
+                if (ac != null && animalType.eats.Find(x => x == ac.animalType) != null)
+                {
+                    // Run towards this animal.
+                    possibleAnimals.Add(ac);
+                }
+            }
+        }
+
+        if (possibleAnimals.Count > 0)
+        {
+            float closest = Mathf.Infinity;
+            foreach (var animal in possibleAnimals)
+            {
+                var possibleTarget = animal.transform.position;
+                var sqrMag = (possibleTarget - transform.position).sqrMagnitude;
+                if (sqrMag < closest)
+                {
+                    closest = sqrMag;
+                    target = possibleTarget;
+                    targetAnimal = animal;
+
+                    // Make the time before the next target check be at most the time it will take to reach the target's current position.
+                    timer = Random.Range(0f, (target - transform.position).magnitude / animalType.moveSpeed);
+                }
+            }
+            return true;
+        }
+
+        return false;
     }
 }
