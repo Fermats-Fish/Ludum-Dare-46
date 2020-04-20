@@ -16,6 +16,8 @@ public class UIController : MonoBehaviour
 
     public Text waterText;
 
+    public Text daysSurvivedText;
+
     public Transform toolSelectPanel;
 
     public List<Tool> tools;
@@ -147,6 +149,12 @@ public class UIController : MonoBehaviour
         {
             tool.UpdateInteractable();
         }
+    }
+
+    public void OnDaysSurvived()
+    {
+        daysSurvivedText.text = "Days: " + (GameController.instance.daysSurvived+GameController.instance.timeOfDay).ToString("0.00");
+      
     }
 
     public void OnWaterChanged()

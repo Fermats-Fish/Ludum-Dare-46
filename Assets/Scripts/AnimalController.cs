@@ -53,14 +53,17 @@ public class AnimalController : MonoBehaviour
         }
 
         // Move towards target.
-        Vector3 delta = (target - transform.position).normalized * animalType.moveSpeed * Time.deltaTime;
-        delta.z = 0;
-        transform.position += delta;
-
-        Vector3 direction = (target - transform.position);
-        if (direction.sqrMagnitude > 0.1f)
+        if (target != null)
         {
-            faceMovement(direction.normalized);
+            Vector3 delta = (target - transform.position).normalized * animalType.moveSpeed * Time.deltaTime;
+            delta.z = 0;
+            transform.position += delta;
+
+            Vector3 direction = (target - transform.position);
+            if (direction.sqrMagnitude > 0.1f)
+            {
+                faceMovement(direction.normalized);
+            }
         }
     }
 

@@ -104,6 +104,7 @@ public class GameController : MonoBehaviour
 
         UIController.instance.OnCarbonChanged();
         UIController.instance.OnWaterChanged();
+       
 
     }
 
@@ -140,6 +141,7 @@ public class GameController : MonoBehaviour
         }
 
         timeOfDay = dayTimer / DAY_LENGTH;
+        UIController.instance.OnDaysSurvived();
     }
 
     public long GetCarbon()
