@@ -17,6 +17,9 @@ public class AnimalType
     public int attackStrength;
     public float attackCooldown;
     public float runAfterHitDistance;
+    
+    public delegate float GetHabitabilityDelegate(List<PlantController> plants, List<AnimalController> animals);
+    public GetHabitabilityDelegate GetHabitability = (x,y) => 0;
 
     public static void InitAnimalTypes()
     {
@@ -28,8 +31,27 @@ public class AnimalType
         bear.eats.Add(deer);
         bear.eats.Add(hunter);
         bear.attractedToPlants.Add(PlantType.plantTypes.Find(x => x.name == "Fruit Tree"));
+        bear.GetHabitability = (plants, animals) => {
+            float fruitWeight = 0;
+            float deerWeight = 0;
+            var fruitTree = PlantType.plantTypes.Find(x => x.name == "Fruit Tree");
+            foreach (var plant in plants)
+            {
+                if(plant.plantType == fruitTree){
+                    fruitWeight += 1;
+                }
+            }
+            foreach (var animal in animals){
+                if (animal.animalType == deer){
+                    deerWeight += 1;
+                }
+            }
+
+            return fruitWeight * deerWeight * 0.04f;
+        };
 
         deer.runsFrom.Add(bear);
+        deer.GetHabitability = (plants, animals) => plants.Count * 0.15f;
 
         hunter.eats.Add(bear);
         hunter.eats.Add(deer);

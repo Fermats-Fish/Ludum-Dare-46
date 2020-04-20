@@ -26,6 +26,7 @@ public class AnimalController : MonoBehaviour
         health = animalType.health;
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sprite = Resources.Load<Sprite>("Sprites/animals/" + animalType.name);
+        GameController.instance.animals.Add(this);
     }
 
     void Update()
@@ -110,6 +111,7 @@ public class AnimalController : MonoBehaviour
         spriteRenderer.color = Color.red;
         if (health <= 0f)
         {
+            GameController.instance.animals.Remove(this);
             Destroy(gameObject);
         }
     }
