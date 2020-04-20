@@ -7,10 +7,11 @@ public class PlantType
 
     public static List<PlantType> plantTypes = new List<PlantType>
     {
-        //            Name                Color,                   Water Requirement, Surpless Water Prod, Carbon Prod, Mature Time, Speed Mod, Build Cost, Helath, Init Spawn Weight
-        new PlantType("Oak",              Color.white,             20,                100,                 150,         200,          0.8f,     20,         300,      1f),
-        new PlantType("Pine",         new Color(0.5f, 0.5f, 0.5f), 40,                  0,                 100,         100,          1f,       10,          90,      1f),
-        new PlantType("Fruit Tree",   new Color(0.7f, 0f, 0.7f),   50,                 20,                  50,         300,          0.9f,     35,         600,      0.1f)
+        //            Name                Color,                   Water Requirement, Surpless Water Prod, Carbon Prod, Mature Time, Speed Mod, Build Cost, Helath, Init Spawn Weight, Flamability.
+        new PlantType("Oak",              Color.white,             20,                100,                 210,         200,          0.8f,     20,         300,      1f,                4f),
+        new PlantType("Pine",         new Color(0.5f, 0.5f, 0.5f), 40,                  0,                 140,         100,          1f,       10,          90,      1f,                4f),
+        new PlantType("Fruit Tree",   new Color(0.7f, 0f, 0.7f),   50,                 20,                  70,         300,          0.9f,     35,         600,      0.1f,              3f),
+        new PlantType("Flame Tree",   new Color(0.7f, 0.5f, 0.1f), 50,                  0,                  50,         300,          0.9f,     40,        1000,      0f,              0.3f),
     };
 
     public string name;
@@ -33,7 +34,9 @@ public class PlantType
 
     public float initSpawnWeight;
 
-    public PlantType(string name, Color color, int waterRequirement, int surplessWaterProd, int maxCarbonProduction, int matureTime, float terrainSpeedModifier, int carbonBuildCost, int health, float initSpawnWeight)
+    public float flamability;
+
+    public PlantType(string name, Color color, int waterRequirement, int surplessWaterProd, int maxCarbonProduction, int matureTime, float terrainSpeedModifier, int carbonBuildCost, int health, float initSpawnWeight, float flamability)
     {
         this.name = name;
         this.surplessWaterProd = surplessWaterProd;
@@ -45,6 +48,7 @@ public class PlantType
         this.carbonBuildCost = carbonBuildCost * 1000;
         this.health = health;
         this.initSpawnWeight = initSpawnWeight;
+        this.flamability = flamability;
     }
 
     public void InitSRVisuals(SpriteRenderer sr, int age)

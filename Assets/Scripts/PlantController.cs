@@ -6,7 +6,6 @@ public class PlantController : MonoBehaviour
 {
     public float maxHealth;
     public float health;
-    public float flammability;
     public bool onFire = false, beingChoppedDown = false;
 
     public SpriteRenderer spriteRenderer;

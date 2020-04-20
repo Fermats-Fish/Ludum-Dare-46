@@ -49,7 +49,7 @@ public class Fire : MonoBehaviour
                     spriteRenderer.color = color * (0.9f + Mathf.Cos(Time.time * 10) / 10) * fireSize * fireHealth;
                     //stransform.localScale = Vector3.one * fireSize;
                     fireSize = (1f - Mathf.Pow(tree.health / tree.maxHealth * 2 - 1, 2)) * tree.spriteRenderer.sprite.bounds.size.x;
-                    tree.health -= tree.flammability * Time.deltaTime;
+                    tree.health -= tree.plantType.flamability * Time.deltaTime;
 
                     float h = Mathf.Max(tree.health / tree.maxHealth, 0.3f);
                     tree.spriteRenderer.color = new Color(h * treeColor.r, h * treeColor.g, h * treeColor.b, 1);
