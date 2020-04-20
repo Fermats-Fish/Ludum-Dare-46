@@ -735,6 +735,7 @@ MonoBehaviour:
     type: 3}
   timeSlider: {fileID: 1165741471}
   timeScaleText: {fileID: 106368335}
+  cloud: {fileID: 0}
 --- !u!1 &669162827
 GameObject:
   m_ObjectHideFlags: 0
@@ -766,9 +767,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   treePrefab: {fileID: 7318170635542595064, guid: cab51f636a96a6840b5ca1917d57fdd5,
     type: 3}
+  cloudPrefab: {fileID: 4293260402552950277, guid: 4245946dc443e634f94cd23b09f3321a,
+    type: 3}
   animalPrefab: {fileID: 5674797521099206790, guid: d80188f5d3d09bf45adea8776e0fe268,
     type: 3}
   trees: []
+  animals: []
+  fires: []
   timeOfDay: 0
   daysSurvived: 0
   terrainPrefab: {fileID: 4395086990619428230, guid: 002bafd07d92dbe4e9ffb779b4609125,
