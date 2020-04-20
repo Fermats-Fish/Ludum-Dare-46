@@ -34,6 +34,9 @@ public class UIController : MonoBehaviour
 
     const float GHOST_Z = -2;
 
+
+    public SpriteRenderer cloud;
+
     void Start()
     {
         // Establish instance.

@@ -38,6 +38,7 @@ public class Enemy : MonoBehaviour
             {
                 // Run away from this animal.
                 GoHome();
+                LookForTree();
                 timeSinceAttack += Time.deltaTime;
                 return;
             }

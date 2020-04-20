@@ -7,11 +7,13 @@ public class GameController : MonoBehaviour
     public static GameController instance;
 
     public GameObject treePrefab;
-
+    public GameObject cloudPrefab;
     public GameObject animalPrefab;
 
     public List<PlantController> trees = new List<PlantController>();
     public List<AnimalController> animals = new List<AnimalController>();
+
+    public List<Fire> fires = new List<Fire>();
 
     const int GRID_SIZE = 100;
 
