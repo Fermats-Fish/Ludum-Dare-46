@@ -37,7 +37,7 @@ public class GameController : MonoBehaviour
 
     float animalAdjustmentTimer = 0f;
     float MIN_TIME_FOR_ANIMAL_ADJUST = 15f;
-    float MAX_TIME_FOR_ANIMAL_ADJUST = 60f;
+    float MAX_TIME_FOR_ANIMAL_ADJUST = 90f;
 
     void Start()
     {
