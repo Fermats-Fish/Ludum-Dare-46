@@ -18,8 +18,6 @@ public class Fire : MonoBehaviour
         fireSize = 0;
         color = spriteRenderer.color;
         transform.localPosition = Vector3.zero;
-        
-
     }
 
     // Update is called once per frame
@@ -44,7 +42,6 @@ public class Fire : MonoBehaviour
                     {
                         List<PlantController> trees = GameController.instance.trees;
 
-
                         for (int i = 0; i < trees.Count; i++)
                         {
                             if (!trees[i].onFire)
@@ -60,11 +57,7 @@ public class Fire : MonoBehaviour
                     }
                 }
             }
-            
         }
-        
-           
-        
     }
 
     public void Spread(PlantController plant) {
