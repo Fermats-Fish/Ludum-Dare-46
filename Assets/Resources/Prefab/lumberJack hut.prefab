@@ -97,5 +97,9 @@ MonoBehaviour:
   numberOfEnemies: 3
   enemyPrefab: {fileID: 1984396914222671408, guid: 57d1968ab3453af45b26dfe6f4cb043f,
     type: 3}
+  upgradePrefab: {fileID: 5585171185290489349, guid: 99feef69a8c0c164995ea317fca2608b,
+    type: 3}
+  bossPrefab: {fileID: 4274507931666956370, guid: c4da611cd2b172045a1d56ef7caeb181,
+    type: 3}
   HOME_TIME: 0.75
   ATTACK_TIME: 0.25

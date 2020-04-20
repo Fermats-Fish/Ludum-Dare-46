@@ -6,10 +6,17 @@ public class SpawnEnemy : MonoBehaviour
 {
     public int numberOfEnemies;
     public GameObject enemyPrefab;
-    List<Enemy> enemies = new List<Enemy>();
+    public GameObject upgradePrefab;
+    public GameObject bossPrefab;
+    public List<Enemy> enemies = new List<Enemy>();
     public float HOME_TIME = 0.75f, ATTACK_TIME = 0.25f;
- 
+
+    public int upgradeDay = 3, bossDay= 10;
+   
+
     int currentDay = 0;
+   public  int daysSinceBoss;
+   public  int daysSinceUpgrade;
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +35,30 @@ public class SpawnEnemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (bossPrefab != null)
+        {
+            if (daysSinceBoss > bossDay)
+            {
+                Enemy newEnemy = Instantiate(bossPrefab).GetComponent<Enemy>();
+                newEnemy.home = transform;
+                newEnemy.transform.position = transform.position;
+                enemies.Add(newEnemy);
+                newEnemy.Init();
+                daysSinceBoss = 0;
+            }
+        }
+        if (upgradePrefab != null)
+        {
+            if (daysSinceUpgrade > upgradeDay)
+            {
+                Enemy newEnemy = Instantiate(upgradePrefab).GetComponent<Enemy>();
+                newEnemy.home = transform;
+                newEnemy.transform.position = transform.position;
+                enemies.Add(newEnemy);
+                newEnemy.Init();
+                daysSinceUpgrade = 0;
+            }
+        }
 
         if (GameController.instance.timeOfDay > ATTACK_TIME & GameController.instance.timeOfDay < ATTACK_TIME + 0.1f)
         {
@@ -45,6 +76,8 @@ public class SpawnEnemy : MonoBehaviour
         if (currentDay < GameController.instance.daysSurvived)
         {
             currentDay = GameController.instance.daysSurvived;
+            daysSinceBoss++;
+            daysSinceUpgrade++;
            
         }
     }
