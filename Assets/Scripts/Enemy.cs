@@ -63,14 +63,18 @@ public class Enemy : MonoBehaviour
             {
 
                 LookForTree();
+  
+                
 
             }
         }
         else
         {
             GoHome();
+            transform.up = Vector3.Normalize(home.position - transform.position);
         }
         timeSinceAttack += Time.deltaTime;
+
     }
 
     float TreeClosest(PlantController tree)
@@ -130,14 +134,25 @@ public class Enemy : MonoBehaviour
         direction = (target.transform.position - transform.position).normalized;
        
         transform.position += speed * direction * Time.deltaTime;
+        if (direction.sqrMagnitude > 0.1f)
+        {
+            faceMovement(direction);
+        }
     }
     void GoHome()
     {
         direction = (home.position - transform.position).normalized;
         transform.position += speed * direction * Time.deltaTime;
-       
+        if (direction.sqrMagnitude > 0.1f) {
+            faceMovement(direction);
+        }
     }
 
+    void faceMovement(Vector3 d) {
+        float bearing = Mathf.Atan2(d.y, d.x)*Mathf.Rad2Deg-90;
+        Vector3 e = transform.eulerAngles;
+        transform.eulerAngles = new Vector3(e.x, e.y, bearing);
+    }
 
     public void Attacked(float attack)
     {

@@ -56,6 +56,19 @@ public class AnimalController : MonoBehaviour
         Vector3 delta = (target - transform.position).normalized * animalType.moveSpeed * Time.deltaTime;
         delta.z = 0;
         transform.position += delta;
+
+        Vector3 direction = (target - transform.position).normalized;
+        if (direction.sqrMagnitude > 0.1f)
+        {
+            faceMovement(direction);
+        }
+    }
+
+    void faceMovement(Vector3 d)
+    {
+        float bearing = Mathf.Atan2(d.y, d.x) * Mathf.Rad2Deg-90;
+        Vector3 e = transform.eulerAngles;
+        transform.eulerAngles = new Vector3(e.x, e.y, bearing);
     }
 
     public void TakeDamage(int amount)
