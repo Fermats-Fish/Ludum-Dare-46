@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AnimalType
 {
-    public static List<AnimalType> animalTypes;
+    public static List<AnimalType> animalTypes = new List<AnimalType>();
 
     public int health;
     public List<AnimalType> runsFrom = new List<AnimalType>();
@@ -16,21 +16,26 @@ public class AnimalType
     public float attackRange;
     public int attackStrength;
     public float attackCooldown;
+    public float runAfterHitDistance;
 
     public static void InitAnimalTypes()
     {
-        var bear = new AnimalType("Bear", 300, 0.5f, 2f, 0.5f, 10, 1f);
-        var deer = new AnimalType("Deer", 50, 0.7f, 1f, 0f, 0, 1f);
-
-        animalTypes = new List<AnimalType> { bear, deer };
+        //                             Name    Health  Speed  Sight  ARange AStrength ACooldown RunAfterHitDist
+        var bear    = new AnimalType("Bear",    100,    0.5f,  2f,    0.5f,    10,      1f,            0f);
+        var deer    = new AnimalType("Deer",     50,    0.7f,  1f,      0f,     0,      1f,            0f);
+        var hunter  = new AnimalType("Hunter",   70,    0.6f, 60f,      1f,  1000,  20000f,        10000f);
 
         bear.eats.Add(deer);
+        bear.eats.Add(hunter);
         bear.attractedToPlants.Add(PlantType.plantTypes.Find(x => x.name == "Fruit Tree"));
 
         deer.runsFrom.Add(bear);
+
+        hunter.eats.Add(bear);
+        hunter.eats.Add(deer);
     }
 
-    public AnimalType(string name, int health, float moveSpeed, float sightRange, float attackRange, int attackStrength, float attackCooldown)
+    public AnimalType(string name, int health, float moveSpeed, float sightRange, float attackRange, int attackStrength, float attackCooldown, float runAfterHitDistance)
     {
         this.name = name;
         this.health = health;
@@ -39,5 +44,8 @@ public class AnimalType
         this.attackRange = attackRange;
         this.attackStrength = attackStrength;
         this.attackCooldown = attackCooldown;
+        this.runAfterHitDistance = runAfterHitDistance;
+
+        animalTypes.Add(this);
     }
 }
