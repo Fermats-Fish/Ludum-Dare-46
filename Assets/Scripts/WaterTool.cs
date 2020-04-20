@@ -6,20 +6,28 @@ public class WaterTool : Tool
 {
 
     const int WATER_COST = 1000;
-    public Transform cloud;
+    public GameObject cloud;
+
+    private void Start()
+    {
+        cloud = Instantiate(GameController.instance.cloudPrefab);
+    }
     public override bool UseTool()
     {
+        
         if (GameController.instance.TrySubtractWater(WATER_COST))
         {
             // PLACE CODE FOR WATER HERE. THIS WILL FIRST WHEN THE USER LEFT CLICKS, NOT ON MOUSE HOLD.
             Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            //cloud.position = pos;
-            List<Fire> fires = GameController.instance.fires;
-
+            pos.z = 0;
+            cloud.GetComponent<SpriteRenderer>().color = Color.white;
+             List <Fire> fires = GameController.instance.fires;
+            cloud.transform.position = pos;
             foreach (Fire t in fires)
             {
                 if (t != null)
                 {
+                   
                     pos.z = t.transform.position.z;
                     print(t);
                     if (Vector3.Distance(pos, t.transform.position) < 1f)
@@ -34,6 +42,11 @@ public class WaterTool : Tool
 
         // Don't deselect tool till the user right clicks.
         return false;
+    }
+
+    private void Update()
+    {
+        cloud.GetComponent<SpriteRenderer>().color = cloud.GetComponent<SpriteRenderer>().color*0.99f;
     }
 
     public override void UpdateInteractable()

@@ -7,7 +7,7 @@ public class GameController : MonoBehaviour
     public static GameController instance;
 
     public GameObject treePrefab;
-
+    public GameObject cloudPrefab;
     public GameObject animalPrefab;
 
     public List<PlantController> trees = new List<PlantController>();
