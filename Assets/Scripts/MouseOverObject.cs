@@ -9,21 +9,31 @@ public abstract class MouseOverObject : MonoBehaviour
     protected abstract string GetMouseOverText();
 
     GameObject mouseOverGO;
-    Text text;
+    Text mouseOverText;
 
-    public void OnMouseEnter()
+    void OnMouseEnter()
     {
         if (mouseOverGO == null && GetMouseOverText() != null)
         {
             mouseOverGO = UIController.instance.CreateMouseOverObj();
-            text = mouseOverGO.GetComponentInChildren<Text>();
+            mouseOverText = mouseOverGO.GetComponentInChildren<Text>();
             UpdateMouseOverText();
         }
     }
 
-    public void OnMouseExit()
+    void OnMouseExit()
     {
         RemoveMouseOverGO();
+    }
+
+    // These have to be manually hooked up by adding an event trigget component to the ui element.
+    public void UIOnMouseEnter()
+    {
+        OnMouseEnter();
+    }
+    public void UIOnMouseExit()
+    {
+        OnMouseExit();
     }
 
     protected void RemoveMouseOverGO()
@@ -39,7 +49,12 @@ public abstract class MouseOverObject : MonoBehaviour
     {
         if (mouseOverGO != null)
         {
-            text.text = GetMouseOverText();
+            mouseOverText.text = GetMouseOverText();
         }
+    }
+
+    void OnDestroy()
+    {
+        RemoveMouseOverGO();
     }
 }

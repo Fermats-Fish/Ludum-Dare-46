@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class Tool : MouseOverObject
 {
-    PlantType plantType;
     Image image;
     Text text;
 

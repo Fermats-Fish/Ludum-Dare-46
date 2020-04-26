@@ -163,7 +163,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 285205905}
-          m_MethodName: OnMouseEnter
+          m_MethodName: UIOnMouseEnter
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -178,7 +178,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 285205905}
-          m_MethodName: OnMouseExit
+          m_MethodName: UIOnMouseExit
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}

@@ -138,7 +138,6 @@ public class AnimalController : MouseOverObject
         if (health <= 0f)
         {
             GameController.instance.animals.Remove(this);
-            RemoveMouseOverGO();
             Destroy(gameObject);
         }
     }
