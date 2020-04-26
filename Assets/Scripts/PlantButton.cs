@@ -39,4 +39,19 @@ public class PlantButton : Tool
         base.Select();
         UIController.instance.SetupPlantGhost(plantType);
     }
+
+    protected override string GetMouseOverText()
+    {
+        return $"{plantType.name}:"
+            + $"\nWater Requirement (Not Implimented): {plantType.waterRequirement}"
+            + $"\nSurpless Water Production: {plantType.surplessWaterProd}"
+            + $"\nCarbon Production: {plantType.maxCarbonProduction}"
+            + $"\nMature Time: {plantType.matureTime}"
+            + $"\nTerrain Speed Modified (Not Implimented): {plantType.terrainSpeedModifier}"
+            + $"\nCarbon Build Cost: {plantType.carbonBuildCost}"
+            + $"\nHealth: {plantType.health}"
+            + $"\nInitial Spawn Weight: {plantType.initSpawnWeight}"
+            + $"\nFlamability: {plantType.flamability}"
+        ;
+    }
 }

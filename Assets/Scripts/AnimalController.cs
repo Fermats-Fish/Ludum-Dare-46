@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AnimalController : MonoBehaviour
+public class AnimalController : MouseOverObject
 {
     public AnimalType animalType;
 
@@ -72,7 +72,8 @@ public class AnimalController : MonoBehaviour
             // Can attack.
             attackTimer = animalType.attackCooldown;
             targetAnimal.TakeDamage(animalType.attackStrength);
-            if (targetAnimal.GetHealth() <= 0){
+            if (targetAnimal.GetHealth() <= 0)
+            {
                 hunger += targetAnimal.animalType.foodValue;
             }
 
@@ -118,6 +119,9 @@ public class AnimalController : MonoBehaviour
                 }
             }
         }
+
+        UpdateMouseOverText();
+
     }
 
     void faceMovement(Vector3 d)
@@ -134,6 +138,7 @@ public class AnimalController : MonoBehaviour
         if (health <= 0f)
         {
             GameController.instance.animals.Remove(this);
+            RemoveMouseOverGO();
             Destroy(gameObject);
         }
     }
@@ -143,15 +148,16 @@ public class AnimalController : MonoBehaviour
         return health;
     }
 
-    public bool Hungry(){
+    public bool Hungry()
+    {
         return hunger < animalType.maxHunger / 2;
     }
 
     void PickNewTarget()
     {
-        if (audioSource != null && Random.Range(0f, 1f) <= AUDIO_CHANCE_ON_TARGET_CHANGE){
+        if (audioSource != null && Random.Range(0f, 1f) <= AUDIO_CHANCE_ON_TARGET_CHANGE)
+        {
             audioSource.Play();
-            Debug.Log("Sound");
         }
 
         // First check we are near a tree.
@@ -309,4 +315,20 @@ public class AnimalController : MonoBehaviour
 
         return false;
     }
+
+    protected override string GetMouseOverText()
+    {
+        return $"{animalType.name}:"
+            + $"\nHealth: {health}/{animalType.health}"
+            + $"\nHunger: {hunger.ToString("0.00")}/{animalType.maxHunger}"
+            + $"\nFood Provied When Eaten: {animalType.foodValue}"
+            + $"\nSight Distance: {animalType.sightRange}"
+            + $"\nSpeed: {animalType.moveSpeed}"
+            + $"\nAttack Range: {animalType.attackRange}"
+            + $"\nAttack Cooldown: {animalType.attackCooldown}"
+            + $"\nAttack Strength: {animalType.attackStrength}"
+            + (animalType.runAfterHitDistance > 0 ? $"\nRun After Attack Distance: {animalType.runAfterHitDistance}" : "")
+        ;
+    }
+
 }

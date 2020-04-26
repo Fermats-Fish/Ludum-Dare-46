@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Tool : MonoBehaviour
+public class Tool : MouseOverObject
 {
     PlantType plantType;
     Image image;
@@ -45,5 +45,10 @@ public class Tool : MonoBehaviour
     public virtual void UpdateInteractable()
     {
 
+    }
+
+    protected override string GetMouseOverText()
+    {
+        return null;
     }
 }

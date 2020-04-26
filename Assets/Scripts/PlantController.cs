@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlantController : MonoBehaviour
+public class PlantController : MouseOverObject
 {
     public float maxHealth;
     public float health;
@@ -53,6 +53,7 @@ public class PlantController : MonoBehaviour
     public void Attacked(float attack)
     {
         health -= attack;
+        UpdateMouseOverText();
         StartCoroutine("Shake");
         if (health < 0)
         {
@@ -85,6 +86,7 @@ public class PlantController : MonoBehaviour
 
     public void OnDeath()
     {
+        RemoveMouseOverGO();
 
         GameController.instance.trees.Remove(this);
         if (onFire)
@@ -93,7 +95,6 @@ public class PlantController : MonoBehaviour
             Destroy(gameObject, 10f);
             return;
         }
-
 
         Destroy(gameObject, .5f);
     }
@@ -104,12 +105,19 @@ public class PlantController : MonoBehaviour
         {
             SetAge(age + 1);
 
-            long carbonProduced = Mathf.FloorToInt(plantType.maxCarbonProduction * Mathf.Pow(1 - 100f / (100f + plantType.matureTime * age), 10));
-            GameController.instance.AddToCarbon(carbonProduced);
-
-            long waterProduced = Mathf.FloorToInt(plantType.surplessWaterProd * Mathf.Pow(1 - 100f / (100f + plantType.matureTime * age), 10));
-            GameController.instance.AddToWater(waterProduced);
+            GameController.instance.AddToCarbon(GetCarbonProd());
+            GameController.instance.AddToWater(GetWaterProd());
         }
+    }
+
+    long GetCarbonProd()
+    {
+        return Mathf.FloorToInt(plantType.maxCarbonProduction * Mathf.Pow(1 - 100f / (100f + plantType.matureTime * age), 10));
+    }
+
+    long GetWaterProd()
+    {
+        return Mathf.FloorToInt(plantType.surplessWaterProd * Mathf.Pow(1 - 100f / (100f + plantType.matureTime * age), 10));
     }
 
     public void SetAge(int newAge)
@@ -118,7 +126,20 @@ public class PlantController : MonoBehaviour
 
         // Visuals might have changed.
         plantType.InitSRVisuals(spriteRenderer, age);
+
+        // Change mouse over.
+        UpdateMouseOverText();
     }
 
+    protected override string GetMouseOverText()
+    {
+        return $"{plantType.name}:"
+            + $"\nCarbon Production: {GetCarbonProd()}/{plantType.maxCarbonProduction}"
+            + $"\nWater Production: {GetWaterProd()}/{plantType.surplessWaterProd}"
+            + $"\nHealth: {health}/{plantType.health}"
+            + $"\nMaturity: {(100 * age) / plantType.matureTime}%"
+            + $"\nFlamability: {(100 * age) / plantType.matureTime}%"
+        ;
+    }
 
 }

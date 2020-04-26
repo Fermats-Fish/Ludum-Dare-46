@@ -35,11 +35,11 @@ public class UIController : MonoBehaviour
 
     const float GHOST_Z = -2;
 
+    public Transform mouseOverArea;
 
-   
-   
+    public GameObject mouseOverPrefab;
 
-    public static bool muted = true;
+    List<MouseOverObject> mouseOvers;
 
     void Start()
     {
@@ -65,10 +65,14 @@ public class UIController : MonoBehaviour
 
     }
 
-    public void UpdateAudioOn(bool audioOn){
-        if (audioOn){
+    public void UpdateAudioOn(bool audioOn)
+    {
+        if (audioOn)
+        {
             AudioListener.volume = 1f;
-        } else {
+        }
+        else
+        {
             AudioListener.volume = 0f;
         }
     }
@@ -153,7 +157,7 @@ public class UIController : MonoBehaviour
                 DeselectTool();
             }
         }
-        Time.timeScale = (int)(timeSlider.value*(MAX_SPEED-1) + 1);
+        Time.timeScale = (int)(timeSlider.value * (MAX_SPEED - 1) + 1);
         timeScaleText.text = "Time x" + Time.timeScale;
     }
 
@@ -173,8 +177,8 @@ public class UIController : MonoBehaviour
 
     public void OnDaysSurvived()
     {
-        daysSurvivedText.text = "Days: " + (GameController.instance.daysSurvived+GameController.instance.timeOfDay).ToString("0.00");
-      
+        daysSurvivedText.text = "Days: " + (GameController.instance.daysSurvived + GameController.instance.timeOfDay).ToString("0.00");
+
     }
 
     public void OnWaterChanged()
@@ -185,4 +189,10 @@ public class UIController : MonoBehaviour
         }
         waterText.text = "Water: " + (GameController.instance.GetWater() / 10000f).ToString("0.00");
     }
+
+    public GameObject CreateMouseOverObj()
+    {
+        return Instantiate(mouseOverPrefab, mouseOverArea);
+    }
+
 }
